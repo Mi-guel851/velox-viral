@@ -72,6 +72,10 @@ const config: Config = {
           youtube: "#FF0000",
         }
       },
+      spacing: {
+        // Intermediate control height used by large marketing/auth CTAs.
+        13: "3.25rem",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

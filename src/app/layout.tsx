@@ -1,11 +1,38 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { BRAND } from "@/lib/brand";
+import { appUrl } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: "ViralFlow • Premium AI Social Media Management & Flywheel",
-  description:
-    "Apple-inspired AI social media operating system. Create one post, intelligently adapt to Instagram, TikTok, X, LinkedIn, Facebook, Threads & YouTube, preview live, and schedule for peak audience windows.",
+  metadataBase: new URL(appUrl()),
+  title: {
+    default: `${BRAND.name} — ${BRAND.tagline}`,
+    template: `%s · ${BRAND.name}`,
+  },
+  description: BRAND.description,
+  applicationName: BRAND.name,
+  openGraph: {
+    type: "website",
+    siteName: BRAND.name,
+    title: `${BRAND.name} — Write once. Publish everywhere.`,
+    description: BRAND.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${BRAND.name} — Write once. Publish everywhere.`,
+    description: BRAND.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#08090d",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -19,6 +46,7 @@ export default function RootLayout({
         {children}
         <Toaster
           position="bottom-right"
+          closeButton
           toastOptions={{
             style: {
               background: "rgba(24, 24, 27, 0.95)",
