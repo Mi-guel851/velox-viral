@@ -23,7 +23,14 @@ import { FlywheelVisual } from "@/components/marketing/FlywheelVisual";
 import { PlatformIcon } from "@/components/ui/platform-icons";
 import { Button } from "@/components/ui/button";
 import { PLATFORMS, ALL_PLATFORMS } from "@/lib/platforms/constants";
-import { PLANS, PLAN_ORDER, formatPlanPrice } from "@/lib/plans";
+import {
+  PLANS,
+  PLAN_ORDER,
+  formatPlanPrice,
+  planAmount,
+  DEFAULT_BILLING_CURRENCY,
+} from "@/lib/plans";
+import { serverEnv } from "@/lib/env.server";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
@@ -122,6 +129,10 @@ const FAQS = [
 ];
 
 export default function LandingPage() {
+  // Prices are shown in whatever currency Paystack is configured to charge, so
+  // the pricing grid can never advertise a different currency than the checkout.
+  const currency = serverEnv.PAYSTACK_CURRENCY ?? DEFAULT_BILLING_CURRENCY;
+
   return (
     <div className="min-h-screen">
       <MarketingNav />
@@ -346,6 +357,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-5 items-start">
             {PLAN_ORDER.map((planId, index) => {
               const plan = PLANS[planId];
+              const isPaid = planAmount(plan, currency) > 0;
               return (
                 <Reveal key={plan.id} delay={index * 0.08}>
                   <div
@@ -366,9 +378,9 @@ export default function LandingPage() {
                       <h3 className="text-lg font-bold text-white">{plan.name}</h3>
                       <div className="flex items-baseline gap-1.5">
                         <span className="text-4xl font-extrabold text-white tracking-tight">
-                          {formatPlanPrice(plan)}
+                          {formatPlanPrice(plan, currency)}
                         </span>
-                        {plan.priceCents > 0 && (
+                        {isPaid && (
                           <span className="text-xs text-zinc-500 font-medium">/month</span>
                         )}
                       </div>
@@ -394,7 +406,7 @@ export default function LandingPage() {
                       className="w-full rounded-2xl h-11 text-sm font-semibold"
                     >
                       <Link href="/signup">
-                        {plan.priceCents === 0 ? "Get started free" : `Choose ${plan.name}`}
+                        {isPaid ? `Choose ${plan.name}` : "Get started free"}
                       </Link>
                     </Button>
                   </div>

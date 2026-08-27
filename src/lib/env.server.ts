@@ -20,10 +20,16 @@ const serverSchema = z.object({
   GEMINI_MODEL: z.string().min(1).default("gemini-2.5-flash"),
   TOKEN_ENCRYPTION_KEY: z.string().optional(),
   CRON_SECRET: z.string().min(16).optional(),
-  STRIPE_SECRET_KEY: z.string().min(10).optional(),
-  STRIPE_WEBHOOK_SECRET: z.string().min(10).optional(),
-  STRIPE_PRICE_PRO: z.string().optional(),
-  STRIPE_PRICE_BUSINESS: z.string().optional(),
+  // Paystack. The secret key is server-only; the public key is safe to expose
+  // but is only ever needed server-side here because checkout is initialised
+  // from the server and the user is redirected to Paystack's hosted page.
+  PAYSTACK_SECRET_KEY: z.string().min(10).optional(),
+  PAYSTACK_PUBLIC_KEY: z.string().min(10).optional(),
+  /** Paystack plan codes, e.g. PLN_xxxxxxxx. */
+  PAYSTACK_PLAN_PRO: z.string().optional(),
+  PAYSTACK_PLAN_BUSINESS: z.string().optional(),
+  /** Billing currency. Must match the currency of your Paystack plans. */
+  PAYSTACK_CURRENCY: z.enum(["NGN", "GHS", "ZAR", "KES", "USD"]).default("NGN"),
 });
 
 const parsedServer = serverSchema.safeParse(process.env);
@@ -36,10 +42,10 @@ export const serverEnv = parsedServer.success
       GEMINI_API_KEY: undefined,
       TOKEN_ENCRYPTION_KEY: undefined,
       CRON_SECRET: undefined,
-      STRIPE_SECRET_KEY: undefined,
-      STRIPE_WEBHOOK_SECRET: undefined,
-      STRIPE_PRICE_PRO: undefined,
-      STRIPE_PRICE_BUSINESS: undefined,
+      PAYSTACK_SECRET_KEY: undefined,
+      PAYSTACK_PUBLIC_KEY: undefined,
+      PAYSTACK_PLAN_PRO: undefined,
+      PAYSTACK_PLAN_BUSINESS: undefined,
     };
 
 // ---------------------------------------------------------------------------
@@ -82,8 +88,20 @@ export function getEncryptionKey(): Buffer | null {
   return null;
 }
 
+/**
+ * Billing is live once a Paystack secret key is present.
+ *
+ * Paystack authenticates webhooks by HMAC-signing the raw body with the same
+ * secret key, so there is no separate webhook secret to configure.
+ */
 export function isBillingConfigured(): boolean {
-  return Boolean(serverEnv.STRIPE_SECRET_KEY && serverEnv.STRIPE_WEBHOOK_SECRET);
+  return Boolean(serverEnv.PAYSTACK_SECRET_KEY);
+}
+
+/** The Paystack plan code for a paid plan, or null when it isn't configured. */
+export function getPaystackPlanCode(plan: "pro" | "business"): string | null {
+  const code = plan === "pro" ? serverEnv.PAYSTACK_PLAN_PRO : serverEnv.PAYSTACK_PLAN_BUSINESS;
+  return code && code.trim() ? code.trim() : null;
 }
 
 export function isCronConfigured(): boolean {
@@ -146,6 +164,11 @@ export function configurationReport() {
     encryption: isEncryptionConfigured(),
     cron: isCronConfigured(),
     billing: isBillingConfigured(),
+    billingCurrency: serverEnv.PAYSTACK_CURRENCY,
+    billingPlans: {
+      pro: Boolean(getPaystackPlanCode("pro")),
+      business: Boolean(getPaystackPlanCode("business")),
+    },
     platforms: Object.fromEntries(
       (Object.keys(PLATFORM_ENV_KEYS) as Platform[]).map((p) => [
         p,

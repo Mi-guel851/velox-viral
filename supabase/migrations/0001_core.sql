@@ -63,9 +63,15 @@ create table if not exists public.subscriptions (
   status                 text not null default 'active'
                            check (status in ('active','trialing','past_due','canceled','incomplete')),
   -- Populated only by the server-side billing webhook. Never written from the client.
-  provider               text check (provider in ('stripe')),
+  provider               text check (provider in ('paystack')),
+  -- Paystack customer_code (CUS_...) and subscription_code (SUB_...).
   provider_customer_id   text,
   provider_subscription_id text,
+  -- Paystack plan code (PLN_...) the subscription is attached to.
+  provider_plan_code     text,
+  -- Provider-specific extras, e.g. Paystack's email_token, which is required
+  -- alongside the subscription code to disable a subscription.
+  provider_metadata      jsonb not null default '{}'::jsonb,
   current_period_start   timestamptz,
   current_period_end     timestamptz,
   cancel_at_period_end   boolean not null default false,

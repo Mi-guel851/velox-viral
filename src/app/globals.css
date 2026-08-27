@@ -70,9 +70,22 @@
   * {
     @apply border-border;
   }
+
+  /*
+   * The mesh gradient is applied to <body> by the root layout, so setting
+   * `bg-background` here as well produced two competing background-color
+   * declarations on the same element. Only the text/selection defaults belong
+   * here; the background is owned by .mesh-gradient-bg.
+   */
   body {
-    @apply bg-background text-foreground antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+    @apply text-foreground antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Consistent, visible keyboard focus across every interactive element. */
+  :focus-visible {
+    outline: 2px solid rgb(129 140 248 / 0.8);
+    outline-offset: 2px;
   }
 }
 
@@ -175,4 +188,55 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Skeleton loaders
+   A shimmering placeholder used while real data is in flight, so the premium
+   feel is preserved without ever rendering invented numbers.
+   --------------------------------------------------------------------------- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: skeleton-shimmer 1.6s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility: honour the OS "reduce motion" setting.
+   Decorative motion is disabled while everything stays fully usable.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton::after {
+    animation: none;
+  }
 }

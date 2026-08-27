@@ -1,0 +1,39 @@
+{
+  // VS Code's built-in CSS validator doesn't know Tailwind's at-rules, so it
+  // reports `@tailwind`, `@apply`, `@layer` and `@screen` in globals.css as
+  // "Unknown at rule". They are valid and are compiled away by PostCSS, so the
+  // validator is silenced rather than the directives being removed.
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+
+  // Treat Tailwind's custom properties/functions as known.
+  "css.lint.unknownProperties": "ignore",
+
+  // Tailwind IntelliSense picks up class names inside cn()/cva() helpers.
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass"],
+
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+
+  // The workspace TypeScript version, so editor diagnostics match `tsc`.
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+
+  "files.exclude": {
+    "**/.next": true,
+    "**/node_modules": true
+  }
+}

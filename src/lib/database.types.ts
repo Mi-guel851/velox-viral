@@ -89,7 +89,7 @@ export type GenerationKind =
   | "variations";
 
 /** Ordered media attached to a post, resolved to signed URLs at render time. */
-export interface PostMediaItem {
+export type PostMediaItem = {
   asset_id: string;
   storage_path: string;
   url?: string;
@@ -100,7 +100,7 @@ export interface PostMediaItem {
 // ---------------------------------------------------------------------------
 // profiles
 // ---------------------------------------------------------------------------
-export interface ProfileRow {
+export type ProfileRow = {
   id: string;
   email: string;
   full_name: string | null;
@@ -116,7 +116,7 @@ export interface ProfileRow {
   updated_at: string;
 }
 
-export interface ProfileInsert {
+export type ProfileInsert = {
   id: string;
   email: string;
   full_name?: string | null;
@@ -135,14 +135,16 @@ export type ProfileUpdate = Partial<ProfileInsert>;
 // ---------------------------------------------------------------------------
 // subscriptions
 // ---------------------------------------------------------------------------
-export interface SubscriptionRow {
+export type SubscriptionRow = {
   id: string;
   user_id: string;
   plan: PlanId;
   status: SubscriptionStatus;
-  provider: "stripe" | null;
+  provider: "paystack" | null;
   provider_customer_id: string | null;
   provider_subscription_id: string | null;
+  provider_plan_code: string | null;
+  provider_metadata: Json;
   current_period_start: string | null;
   current_period_end: string | null;
   cancel_at_period_end: boolean;
@@ -150,13 +152,15 @@ export interface SubscriptionRow {
   updated_at: string;
 }
 
-export interface SubscriptionInsert {
+export type SubscriptionInsert = {
   user_id: string;
   plan?: PlanId;
   status?: SubscriptionStatus;
-  provider?: "stripe" | null;
+  provider?: "paystack" | null;
   provider_customer_id?: string | null;
   provider_subscription_id?: string | null;
+  provider_plan_code?: string | null;
+  provider_metadata?: Json;
   current_period_start?: string | null;
   current_period_end?: string | null;
   cancel_at_period_end?: boolean;
@@ -167,7 +171,7 @@ export type SubscriptionUpdate = Partial<SubscriptionInsert>;
 // ---------------------------------------------------------------------------
 // usage_counters
 // ---------------------------------------------------------------------------
-export interface UsageCounterRow {
+export type UsageCounterRow = {
   id: string;
   user_id: string;
   metric: UsageMetric;
@@ -176,7 +180,7 @@ export interface UsageCounterRow {
   updated_at: string;
 }
 
-export interface UsageCounterInsert {
+export type UsageCounterInsert = {
   user_id: string;
   metric: UsageMetric;
   period_start: string;
@@ -188,7 +192,7 @@ export type UsageCounterUpdate = Partial<UsageCounterInsert>;
 // ---------------------------------------------------------------------------
 // social_accounts
 // ---------------------------------------------------------------------------
-export interface SocialAccountRow {
+export type SocialAccountRow = {
   id: string;
   user_id: string;
   platform: PlatformKey;
@@ -207,7 +211,7 @@ export interface SocialAccountRow {
   updated_at: string;
 }
 
-export interface SocialAccountInsert {
+export type SocialAccountInsert = {
   id?: string;
   user_id: string;
   platform: PlatformKey;
@@ -229,7 +233,7 @@ export type SocialAccountUpdate = Partial<SocialAccountInsert>;
 // ---------------------------------------------------------------------------
 // social_account_secrets
 // ---------------------------------------------------------------------------
-export interface SocialAccountSecretRow {
+export type SocialAccountSecretRow = {
   social_account_id: string;
   access_token_enc: string;
   refresh_token_enc: string | null;
@@ -241,7 +245,7 @@ export interface SocialAccountSecretRow {
   updated_at: string;
 }
 
-export interface SocialAccountSecretInsert {
+export type SocialAccountSecretInsert = {
   social_account_id: string;
   access_token_enc: string;
   refresh_token_enc?: string | null;
@@ -256,7 +260,7 @@ export type SocialAccountSecretUpdate = Partial<SocialAccountSecretInsert>;
 // ---------------------------------------------------------------------------
 // oauth_states
 // ---------------------------------------------------------------------------
-export interface OAuthStateRow {
+export type OAuthStateRow = {
   state: string;
   user_id: string;
   platform: PlatformKey;
@@ -266,7 +270,7 @@ export interface OAuthStateRow {
   expires_at: string;
 }
 
-export interface OAuthStateInsert {
+export type OAuthStateInsert = {
   state: string;
   user_id: string;
   platform: PlatformKey;
@@ -280,7 +284,7 @@ export type OAuthStateUpdate = Partial<OAuthStateInsert>;
 // ---------------------------------------------------------------------------
 // media_assets
 // ---------------------------------------------------------------------------
-export interface MediaAssetRow {
+export type MediaAssetRow = {
   id: string;
   user_id: string;
   storage_path: string;
@@ -294,7 +298,7 @@ export interface MediaAssetRow {
   created_at: string;
 }
 
-export interface MediaAssetInsert {
+export type MediaAssetInsert = {
   id?: string;
   user_id: string;
   storage_path: string;
@@ -312,7 +316,7 @@ export type MediaAssetUpdate = Partial<MediaAssetInsert>;
 // ---------------------------------------------------------------------------
 // posts
 // ---------------------------------------------------------------------------
-export interface PostRow {
+export type PostRow = {
   id: string;
   user_id: string;
   title: string | null;
@@ -333,7 +337,7 @@ export interface PostRow {
   updated_at: string;
 }
 
-export interface PostInsert {
+export type PostInsert = {
   id?: string;
   user_id: string;
   title?: string | null;
@@ -357,7 +361,7 @@ export type PostUpdate = Partial<PostInsert>;
 // ---------------------------------------------------------------------------
 // post_targets
 // ---------------------------------------------------------------------------
-export interface PostTargetRow {
+export type PostTargetRow = {
   id: string;
   post_id: string;
   user_id: string;
@@ -374,7 +378,7 @@ export interface PostTargetRow {
   updated_at: string;
 }
 
-export interface PostTargetInsert {
+export type PostTargetInsert = {
   id?: string;
   post_id: string;
   user_id: string;
@@ -394,7 +398,7 @@ export type PostTargetUpdate = Partial<PostTargetInsert>;
 // ---------------------------------------------------------------------------
 // post_metrics
 // ---------------------------------------------------------------------------
-export interface PostMetricRow {
+export type PostMetricRow = {
   id: string;
   post_target_id: string;
   user_id: string;
@@ -413,7 +417,7 @@ export interface PostMetricRow {
   raw: Json;
 }
 
-export interface PostMetricInsert {
+export type PostMetricInsert = {
   post_target_id: string;
   user_id: string;
   platform: PlatformKey;
@@ -435,7 +439,7 @@ export type PostMetricUpdate = Partial<PostMetricInsert>;
 // ---------------------------------------------------------------------------
 // analytics_snapshots
 // ---------------------------------------------------------------------------
-export interface AnalyticsSnapshotRow {
+export type AnalyticsSnapshotRow = {
   id: string;
   user_id: string;
   social_account_id: string;
@@ -456,7 +460,7 @@ export interface AnalyticsSnapshotRow {
   created_at: string;
 }
 
-export interface AnalyticsSnapshotInsert {
+export type AnalyticsSnapshotInsert = {
   user_id: string;
   social_account_id: string;
   platform: PlatformKey;
@@ -480,7 +484,7 @@ export type AnalyticsSnapshotUpdate = Partial<AnalyticsSnapshotInsert>;
 // ---------------------------------------------------------------------------
 // content_generations
 // ---------------------------------------------------------------------------
-export interface ContentGenerationRow {
+export type ContentGenerationRow = {
   id: string;
   user_id: string;
   kind: GenerationKind;
@@ -497,7 +501,7 @@ export interface ContentGenerationRow {
   created_at: string;
 }
 
-export interface ContentGenerationInsert {
+export type ContentGenerationInsert = {
   user_id: string;
   kind: GenerationKind;
   platform?: PlatformKey | null;
@@ -517,7 +521,7 @@ export type ContentGenerationUpdate = Partial<ContentGenerationInsert>;
 // ---------------------------------------------------------------------------
 // content_templates
 // ---------------------------------------------------------------------------
-export interface ContentTemplateRow {
+export type ContentTemplateRow = {
   id: string;
   user_id: string;
   title: string;
@@ -530,7 +534,7 @@ export interface ContentTemplateRow {
   updated_at: string;
 }
 
-export interface ContentTemplateInsert {
+export type ContentTemplateInsert = {
   user_id: string;
   title: string;
   description?: string | null;
@@ -545,7 +549,7 @@ export type ContentTemplateUpdate = Partial<ContentTemplateInsert>;
 // ---------------------------------------------------------------------------
 // notifications
 // ---------------------------------------------------------------------------
-export interface NotificationRow {
+export type NotificationRow = {
   id: string;
   user_id: string;
   type: NotificationType;
@@ -557,7 +561,7 @@ export interface NotificationRow {
   created_at: string;
 }
 
-export interface NotificationInsert {
+export type NotificationInsert = {
   user_id: string;
   type: NotificationType;
   title: string;
@@ -572,7 +576,7 @@ export type NotificationUpdate = Partial<NotificationInsert>;
 // ---------------------------------------------------------------------------
 // activity_logs
 // ---------------------------------------------------------------------------
-export interface ActivityLogRow {
+export type ActivityLogRow = {
   id: string;
   user_id: string;
   action: string;
@@ -582,7 +586,7 @@ export interface ActivityLogRow {
   created_at: string;
 }
 
-export interface ActivityLogInsert {
+export type ActivityLogInsert = {
   user_id: string;
   action: string;
   entity_type?: string | null;
@@ -605,7 +609,7 @@ export type ActivityLogUpdate = Partial<ActivityLogInsert>;
  * typed. Only relationships between tables in the `public` schema are listed;
  * `auth.users` is not embeddable via PostgREST, so those FKs are omitted.
  */
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       profiles: {
@@ -786,7 +790,7 @@ export interface Database {
 // Analytics function result shapes
 // ---------------------------------------------------------------------------
 
-export interface AnalyticsSummaryResult {
+export type AnalyticsSummaryResult = {
   total_followers: number;
   followers_delta: number;
   follower_growth_pct: number;
@@ -803,7 +807,7 @@ export interface AnalyticsSummaryResult {
   connected_accounts: number;
 }
 
-export interface AnalyticsTimeseriesPoint {
+export type AnalyticsTimeseriesPoint = {
   day: string;
   impressions: number;
   reach: number;
@@ -811,7 +815,7 @@ export interface AnalyticsTimeseriesPoint {
   followers: number;
 }
 
-export interface AnalyticsPlatformBreakdown {
+export type AnalyticsPlatformBreakdown = {
   platform: PlatformKey;
   followers: number;
   followers_delta: number;
