@@ -91,6 +91,25 @@ export const forgotPasswordSchema = z.object({
   email: emailSchema,
 });
 
+export const securityPhraseSchema = z.object({
+  securityPhrase: z
+    .string()
+    .min(3, "Your security phrase must be at least 3 characters.")
+    .max(120, "Security phrase is too long.")
+    .transform((value) => value.trim()),
+});
+
+export const verifySecurityPhraseSchema = z.object({
+  email: emailSchema,
+  securityPhrase: z
+    .string()
+    .min(1, "Enter your security phrase.")
+    .transform((value) => value.trim()),
+});
+
+export type SecurityPhraseInput = z.infer<typeof securityPhraseSchema>;
+export type VerifySecurityPhraseInput = z.infer<typeof verifySecurityPhraseSchema>;
+
 export const resetPasswordSchema = z
   .object({
     password: passwordSchema,

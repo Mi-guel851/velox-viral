@@ -1,13 +1,3 @@
-/**
- * Authentication server actions.
- *
- * All auth mutations run here rather than in the browser so that:
- *  - inputs are validated server-side, where it counts;
- *  - Supabase's own error messages are mapped to safe, human wording without
- *    leaking whether an email exists;
- *  - session cookies are set by the server, which is what keeps the session
- *    readable by middleware and server components.
- */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -18,17 +8,15 @@ import { isSupabaseConfigured, appUrl } from "@/lib/env";
 import {
   signUpSchema,
   signInSchema,
-  forgotPasswordSchema,
+  securityPhraseSchema,
+  verifySecurityPhraseSchema,
   resetPasswordSchema,
 } from "@/lib/validation/auth";
 
-/** Uniform result shape so every form renders errors the same way. */
 export interface AuthActionResult {
   ok: boolean;
   error?: string;
-  /** Per-field messages keyed by form field name. */
   fieldErrors?: Record<string, string>;
-  /** Success text to display when there is no redirect (e.g. "check your email"). */
   message?: string;
 }
 
@@ -38,12 +26,6 @@ const NOT_CONFIGURED: AuthActionResult = {
     "This deployment is not connected to a database yet. Add your Supabase credentials to enable accounts.",
 };
 
-/**
- * Maps Supabase auth errors to user-facing copy.
- *
- * Invalid credentials are deliberately reported without revealing whether the
- * email exists, which would otherwise let anyone enumerate registered users.
- */
 function describeAuthError(message: string, status?: number): string {
   const normalised = message.toLowerCase();
 
@@ -72,29 +54,12 @@ function describeAuthError(message: string, status?: number): string {
     return "Captcha verification failed. Please try again.";
   }
 
-  // Anything unrecognised: log the detail server-side, return something generic.
   console.error("[auth] unmapped error:", message);
   return "Something went wrong on our side. Please try again.";
 }
 
-/** Resolves the request origin, falling back to the configured app URL. */
-async function requestOrigin(): Promise<string> {
-  try {
-    const headerList = await headers();
-    const origin = headerList.get("origin");
-    if (origin) return origin;
-
-    const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
-    const proto = headerList.get("x-forwarded-proto") ?? "https";
-    if (host) return `${proto}://${host}`;
-  } catch {
-    // Fall through to the configured value.
-  }
-  return appUrl();
-}
-
 // ---------------------------------------------------------------------------
-// Sign up
+// Sign up — no email confirmation, user is signed in immediately
 // ---------------------------------------------------------------------------
 
 export async function signUpAction(formData: FormData): Promise<AuthActionResult> {
@@ -119,15 +84,13 @@ export async function signUpAction(formData: FormData): Promise<AuthActionResult
 
   const { fullName, email, password } = parsed.data;
   const supabase = await createServerSupabaseClient();
-  const origin = await requestOrigin();
 
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      // Metadata is consumed by the handle_new_user() trigger to seed the profile.
       data: { full_name: fullName },
-      emailRedirectTo: `${origin}/auth/confirm?next=/onboarding`,
+      // No emailRedirectTo — confirmation is disabled, user is signed in immediately.
     },
   });
 
@@ -135,19 +98,7 @@ export async function signUpAction(formData: FormData): Promise<AuthActionResult
     return { ok: false, error: describeAuthError(error.message, error.status) };
   }
 
-  // With email confirmation enabled Supabase returns a user but no session.
-  // Returning `identities: []` is how it signals "this email already exists"
-  // without disclosing that fact through an error — treat it the same as a
-  // successful signup so the response is indistinguishable to an attacker.
-  if (data.user && !data.session) {
-    return {
-      ok: true,
-      message:
-        "Check your inbox — we've sent a confirmation link to finish setting up your account.",
-    };
-  }
-
-  // Confirmation disabled: the user is signed in immediately.
+  // User is signed in immediately (confirmation disabled). Redirect to onboarding.
   revalidatePath("/", "layout");
   redirect("/onboarding");
 }
@@ -185,8 +136,6 @@ export async function signInAction(formData: FormData): Promise<AuthActionResult
     return { ok: false, error: describeAuthError(error.message, error.status) };
   }
 
-  // Send the user to onboarding if they never finished it, otherwise honour the
-  // `next` param they arrived with.
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -200,6 +149,7 @@ export async function signInAction(formData: FormData): Promise<AuthActionResult
       .eq("id", user.id)
       .maybeSingle();
 
+    // If the user hasn't set up their security phrase yet, send them to onboarding.
     if (profile && profile.onboarding_step !== "done") {
       destination = "/onboarding";
     }
@@ -223,47 +173,230 @@ export async function signOutAction(): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// Forgot password
+// Save security phrase (onboarding step)
 // ---------------------------------------------------------------------------
 
-export async function forgotPasswordAction(formData: FormData): Promise<AuthActionResult> {
+export async function saveSecurityPhraseAction(formData: FormData): Promise<AuthActionResult> {
   if (!isSupabaseConfigured()) return NOT_CONFIGURED;
 
-  const parsed = forgotPasswordSchema.safeParse({ email: formData.get("email") });
+  const parsed = securityPhraseSchema.safeParse({
+    securityPhrase: formData.get("securityPhrase"),
+  });
 
   if (!parsed.success) {
     return {
       ok: false,
-      fieldErrors: { email: parsed.error.issues[0]?.message ?? "Enter a valid email." },
+      fieldErrors: {
+        securityPhrase: parsed.error.issues[0]?.message ?? "Enter a security phrase.",
+      },
     };
   }
 
   const supabase = await createServerSupabaseClient();
-  const origin = await requestOrigin();
 
-  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
-    redirectTo: `${origin}/auth/confirm?next=/reset-password`,
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, error: "You must be signed in to do this." };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      security_phrase: parsed.data.securityPhrase,
+      onboarding_step: "done",
+      onboarding_completed_at: new Date().toISOString(),
+    })
+    .eq("id", user.id);
+
+  if (error) {
+    console.error("[auth] saveSecurityPhrase:", error.message);
+    return { ok: false, error: "Could not save your security phrase. Please try again." };
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/dashboard");
+}
+
+// ---------------------------------------------------------------------------
+// Forgot password — verify security phrase instead of email link
+// ---------------------------------------------------------------------------
+
+export async function verifySecurityPhraseAction(formData: FormData): Promise<AuthActionResult> {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
+
+  const parsed = verifySecurityPhraseSchema.safeParse({
+    email: formData.get("email"),
+    securityPhrase: formData.get("securityPhrase"),
   });
 
-  // Rate limiting is the one error worth surfacing. Everything else is
-  // swallowed on purpose: a differing response would reveal which emails are
-  // registered.
-  if (error && (error.status === 429 || error.message.toLowerCase().includes("rate"))) {
-    return { ok: false, error: describeAuthError(error.message, error.status) };
-  }
-  if (error) {
-    console.error("[auth] resetPasswordForEmail:", error.message);
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const field = issue.path[0];
+      if (typeof field === "string" && !fieldErrors[field]) {
+        fieldErrors[field] = issue.message;
+      }
+    }
+    return { ok: false, error: "Please correct the highlighted fields.", fieldErrors };
   }
 
+  const { email, securityPhrase } = parsed.data;
+  const supabase = await createServerSupabaseClient();
+
+  // Look up the user by email from the profiles table.
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id, security_phrase")
+    .eq("email", email)
+    .maybeSingle();
+
+  // Don't reveal whether the email exists — return the same message either way.
+  if (!profile?.security_phrase || profile.security_phrase !== securityPhrase) {
+    return {
+      ok: true,
+      message:
+        "If an account exists with that email and the security phrase matches, you'll be able to set a new password.",
+    };
+  }
+
+  const userId = profile.id;
+
+  // Security phrase matches. Now we need to create a password reset flow.
+  // Since we can't use Supabase's built-in email recovery, we'll create a
+  // temporary token that allows the user to reset their password.
+  // We'll store a hash of the reset token in the profile and redirect to a
+  // reset page with the token.
+
+  const crypto = await import("crypto");
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const resetTokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour
+
+  // Store the reset token hash in the profile.
+  // We'll use the security_phrase column's context — but actually, we need a
+  // dedicated place. Let's store it temporarily in the activity_logs or use
+  // a simpler approach: update the profile with a reset token hash.
+  //
+  // Since we don't have a dedicated reset_tokens table, we'll use the
+  // activity_logs table to store the reset request.
+  const { error: logError } = await supabase.from("activity_logs").insert({
+    user_id: userId,
+    action: "password_reset_request",
+    entity_type: "auth",
+    entity_id: resetTokenHash,
+    metadata: { expires_at: expiresAt },
+  });
+
+  if (logError) {
+    console.error("[auth] log reset token:", logError.message);
+    return { ok: false, error: "Something went wrong. Please try again." };
+  }
+
+  // Redirect to the reset password page with the token.
+  revalidatePath("/", "layout");
+  redirect(`/reset-password?token=${resetToken}`);
+}
+
+// ---------------------------------------------------------------------------
+// Reset password via security-phrase flow (not email link)
+// ---------------------------------------------------------------------------
+
+export async function resetPasswordWithTokenAction(formData: FormData): Promise<AuthActionResult> {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
+
+  const token = formData.get("token") as string;
+  const parsed = resetPasswordSchema.safeParse({
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const field = issue.path[0];
+      if (typeof field === "string" && !fieldErrors[field]) {
+        fieldErrors[field] = issue.message;
+      }
+    }
+    return { ok: false, error: "Please correct the highlighted fields.", fieldErrors };
+  }
+
+  if (!token) {
+    return { ok: false, error: "Invalid reset link. Please start over." };
+  }
+
+  const crypto = await import("crypto");
+  const resetTokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+  const supabase = await createServerSupabaseClient();
+
+  // Look up the reset token in activity_logs.
+  const { data: logEntry, error: logError } = await supabase
+    .from("activity_logs")
+    .select("user_id, metadata")
+    .eq("action", "password_reset_request")
+    .eq("entity_type", "auth")
+    .eq("entity_id", resetTokenHash)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (logError || !logEntry) {
+    return { ok: false, error: "This reset link is invalid. Please start over." };
+  }
+
+  // Check expiry.
+  const expiresAt = (logEntry.metadata as Record<string, string>)?.expires_at;
+  if (!expiresAt || new Date(expiresAt) < new Date()) {
+    return { ok: false, error: "This reset link has expired. Start the recovery process again." };
+  }
+
+  // Use the admin client to update the user's password (we have the user_id from the log).
+  const { createAdminClient } = await import("@/lib/supabase/server");
+  const admin = createAdminClient();
+
+  if (!admin) {
+    return { ok: false, error: "Admin client not configured." };
+  }
+
+  const { error: updateError } = await admin.auth.admin.updateUserById(logEntry.user_id, {
+    password: parsed.data.password,
+  });
+
+  if (updateError) {
+    return { ok: false, error: describeAuthError(updateError.message, updateError.status) };
+  }
+
+  // Delete the used reset token.
+  await supabase
+    .from("activity_logs")
+    .delete()
+    .eq("action", "password_reset_request")
+    .eq("entity_type", "auth")
+    .eq("entity_id", resetTokenHash);
+
+  revalidatePath("/", "layout");
+  redirect("/login?password_updated=1");
+}
+
+// ---------------------------------------------------------------------------
+// Legacy: forgot password (kept for backwards compat, now redirects to security phrase flow)
+// ---------------------------------------------------------------------------
+
+export async function forgotPasswordAction(formData: FormData): Promise<AuthActionResult> {
+  // This action is now handled by verifySecurityPhraseAction.
+  // Redirect callers to the new flow.
   return {
-    ok: true,
-    message:
-      "If an account exists for that address, a password reset link is on its way. The link is valid for one hour.",
+    ok: false,
+    error: "Please use the security phrase recovery form instead.",
   };
 }
 
 // ---------------------------------------------------------------------------
-// Reset password (completes the recovery flow)
+// Legacy: reset password via email link (kept for backwards compat)
 // ---------------------------------------------------------------------------
 
 export async function resetPasswordAction(formData: FormData): Promise<AuthActionResult> {
@@ -287,8 +420,6 @@ export async function resetPasswordAction(formData: FormData): Promise<AuthActio
 
   const supabase = await createServerSupabaseClient();
 
-  // The recovery link established a session via /auth/confirm. Without one the
-  // link was never opened, or it expired.
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -296,8 +427,7 @@ export async function resetPasswordAction(formData: FormData): Promise<AuthActio
   if (!user) {
     return {
       ok: false,
-      error:
-        "This reset link is no longer valid. Request a new password reset email and try again.",
+      error: "This reset link is no longer valid. Use your security phrase to recover your account.",
     };
   }
 
@@ -312,32 +442,13 @@ export async function resetPasswordAction(formData: FormData): Promise<AuthActio
 }
 
 // ---------------------------------------------------------------------------
-// Resend verification email
+// Resend verification email (legacy, kept for backwards compat)
 // ---------------------------------------------------------------------------
 
 export async function resendVerificationAction(formData: FormData): Promise<AuthActionResult> {
-  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
-
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  if (!email) {
-    return { ok: false, fieldErrors: { email: "Enter your email address." } };
-  }
-
-  const supabase = await createServerSupabaseClient();
-  const origin = await requestOrigin();
-
-  const { error } = await supabase.auth.resend({
-    type: "signup",
-    email,
-    options: { emailRedirectTo: `${origin}/auth/confirm?next=/onboarding` },
-  });
-
-  if (error && (error.status === 429 || error.message.toLowerCase().includes("rate"))) {
-    return { ok: false, error: describeAuthError(error.message, error.status) };
-  }
-  if (error) {
-    console.error("[auth] resend:", error.message);
-  }
-
-  return { ok: true, message: "Verification email sent. Check your inbox." };
+  // Email confirmation is disabled. This is a no-op.
+  return {
+    ok: true,
+    message: "Email confirmation is not required for this account.",
+  };
 }

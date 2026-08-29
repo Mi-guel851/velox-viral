@@ -15,10 +15,6 @@ const NAV_LINKS = [
   { href: "#faq", label: "FAQ" },
 ];
 
-/**
- * Landing page navigation. Gains a solid glass backdrop once scrolled so the
- * wordmark stays legible over the hero artwork.
- */
 export const MarketingNav: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,7 +26,6 @@ export const MarketingNav: React.FC = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Prevent the page scrolling behind the open mobile sheet.
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
@@ -49,26 +44,26 @@ export const MarketingNav: React.FC = () => {
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           <nav
             className={cn(
-              "flex items-center justify-between gap-4 rounded-3xl px-4 sm:px-5 py-2.5 transition-all duration-300",
+              "flex items-center justify-between gap-4 rounded-2xl px-4 sm:px-5 py-2.5 transition-all duration-300",
               scrolled
-                ? "glass-panel border border-white/10 shadow-xl"
+                ? "surface-elevated shadow-lg"
                 : "border border-transparent"
             )}
           >
             <Link
               href="/"
-              className="shrink-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="shrink-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
               aria-label="Velox Viral home"
             >
               <Logo size="sm" />
             </Link>
 
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-0.5">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="px-3 py-2 rounded-xl text-xs font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
+                  className="px-3 py-2 rounded-lg text-[13px] font-medium text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] transition-colors"
                 >
                   {link.label}
                 </a>
@@ -80,7 +75,7 @@ export const MarketingNav: React.FC = () => {
                 asChild
                 variant="ghost"
                 size="sm"
-                className="hidden sm:inline-flex h-9 px-3.5 text-xs font-semibold text-zinc-300 hover:text-white rounded-xl"
+                className="hidden sm:inline-flex h-9 px-3.5 text-xs font-medium text-zinc-400 hover:text-zinc-100 rounded-lg"
               >
                 <Link href="/login">Log in</Link>
               </Button>
@@ -89,7 +84,7 @@ export const MarketingNav: React.FC = () => {
                 asChild
                 variant="gradient"
                 size="sm"
-                className="h-9 px-4 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-500/25"
+                className="h-9 px-4 rounded-lg text-xs font-semibold"
               >
                 <Link href="/signup">
                   <span>Get started</span>
@@ -102,7 +97,7 @@ export const MarketingNav: React.FC = () => {
                 onClick={() => setMenuOpen((open) => !open)}
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={menuOpen}
-                className="lg:hidden p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
+                className="lg:hidden p-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] transition-colors"
               >
                 {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -114,22 +109,22 @@ export const MarketingNav: React.FC = () => {
       {/* Mobile sheet */}
       {menuOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-xl pt-24 px-4">
-          <div className="glass-panel rounded-3xl border border-white/10 p-3 space-y-1">
+          <div className="surface-elevated rounded-2xl p-3 space-y-1">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="block px-4 py-3 rounded-2xl text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+                className="block px-4 py-3 rounded-xl text-sm font-medium text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.04] transition-colors"
               >
                 {link.label}
               </a>
             ))}
-            <div className="pt-2 border-t border-white/10 mt-2 space-y-2">
+            <div className="pt-2 border-t border-white/[0.06] mt-2 space-y-2">
               <Button
                 asChild
                 variant="apple"
-                className="w-full rounded-2xl h-11 text-sm font-semibold"
+                className="w-full rounded-xl h-11 text-sm font-semibold"
               >
                 <Link href="/login" onClick={() => setMenuOpen(false)}>
                   Log in
@@ -138,7 +133,7 @@ export const MarketingNav: React.FC = () => {
               <Button
                 asChild
                 variant="gradient"
-                className="w-full rounded-2xl h-11 text-sm font-semibold"
+                className="w-full rounded-xl h-11 text-sm font-semibold"
               >
                 <Link href="/signup" onClick={() => setMenuOpen(false)}>
                   Create free account

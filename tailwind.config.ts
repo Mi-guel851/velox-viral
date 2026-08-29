@@ -16,6 +16,11 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -50,17 +55,9 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Apple-inspired & Brand palette
-        apple: {
-          blue: "#0071e3",
-          purple: "#6366f1",
-          pink: "#ec4899",
-          amber: "#f59e0b",
-          emerald: "#10b981",
-          cyan: "#06b6d4",
-          subtle: "rgba(255, 255, 255, 0.08)",
-          card: "rgba(18, 18, 22, 0.7)",
-          glass: "rgba(255, 255, 255, 0.05)",
+        amber: {
+          400: "#fbbf24",
+          500: "#f59e0b",
         },
         social: {
           instagram: "#E1306C",
@@ -70,10 +67,9 @@ const config: Config = {
           linkedin: "#0A66C2",
           threads: "#000000",
           youtube: "#FF0000",
-        }
+        },
       },
       spacing: {
-        // Intermediate control height used by large marketing/auth CTAs.
         13: "3.25rem",
       },
       borderRadius: {
@@ -121,9 +117,8 @@ const config: Config = {
         glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
         "glass-sm": "0 4px 16px 0 rgba(0, 0, 0, 0.25)",
         "apple-soft": "0 20px 40px -15px rgba(0, 0, 0, 0.25)",
-        "apple-glow": "0 0 30px -5px rgba(99, 102, 241, 0.3)",
-        "apple-cyan": "0 0 30px -5px rgba(6, 182, 212, 0.3)",
-        "inner-glow": "inset 0 1px 1px 0 rgba(255, 255, 255, 0.15)",
+        glow: "0 0 40px -8px rgba(251, 191, 36, 0.25)",
+        "inner-glow": "inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)",
         "inner-dark": "inset 0 2px 4px 0 rgba(0, 0, 0, 0.4)",
       },
     },

@@ -9,18 +9,9 @@ import { FormField } from "@/components/auth/FormField";
 import { AuthAlert } from "@/components/auth/AuthAlert";
 import { Button } from "@/components/ui/button";
 
-/**
- * Login form.
- *
- * Submits to a server action so validation, error mapping and cookie handling
- * all happen server-side. `useTransition` drives the pending state, which keeps
- * the button in a real loading state for the actual duration of the request —
- * no artificial delay.
- */
 export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => {
   const searchParams = useSearchParams();
   const nextParam = searchParams.get("next") ?? "";
-  // Surfaced by /auth/confirm when an email link fails.
   const linkError = searchParams.get("error");
 
   const [isPending, startTransition] = useTransition();
@@ -32,7 +23,6 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
     const formData = new FormData(event.currentTarget);
 
     startTransition(async () => {
-      // A successful sign-in redirects, so this only resolves on failure.
       const response = await signInAction(formData);
       setResult(response);
     });
@@ -43,7 +33,7 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
   return (
     <div className="space-y-6">
       <header className="space-y-1.5">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Welcome back</h1>
+        <h1 className="font-display text-2xl font-bold text-white tracking-tight">Welcome back</h1>
         <p className="text-sm text-zinc-400">
           Log in to manage your channels and publishing queue.
         </p>
@@ -89,7 +79,7 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="p-2 rounded-xl text-zinc-500 hover:text-zinc-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                className="p-2 rounded-lg text-zinc-500 hover:text-zinc-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -100,7 +90,7 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
           <div className="flex justify-end">
             <Link
               href="/forgot-password"
-              className="text-[11px] font-medium text-indigo-400 hover:text-indigo-300 transition-colors rounded px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="text-[11px] font-medium text-amber-500/80 hover:text-amber-400 transition-colors rounded px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
             >
               Forgot your password?
             </Link>
@@ -111,7 +101,7 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
           type="submit"
           variant="gradient"
           disabled={isPending || !configured}
-          className="w-full h-12 rounded-2xl text-sm font-semibold shadow-lg shadow-indigo-500/25"
+          className="w-full h-12 rounded-xl text-sm font-semibold"
         >
           {isPending ? (
             <>
@@ -131,7 +121,7 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
         New to Velox Viral?{" "}
         <Link
           href="/signup"
-          className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+          className="font-semibold text-amber-500 hover:text-amber-400 transition-colors"
         >
           Create a free account
         </Link>

@@ -6,16 +6,11 @@ import { cn } from "@/lib/utils";
 
 interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  /** Field-level validation message. Also wires up aria-invalid/describedby. */
   error?: string;
   hint?: string;
-  /** Rendered inside the field on the right (e.g. a show/hide password toggle). */
   trailing?: React.ReactNode;
 }
 
-/**
- * Labelled input with accessible error wiring, matching the app's glass styling.
- */
 export const FormField: React.FC<FormFieldProps> = ({
   label,
   error,
@@ -45,14 +40,14 @@ export const FormField: React.FC<FormFieldProps> = ({
           aria-invalid={error ? true : undefined}
           aria-describedby={cn(error && errorId, hint && !error && hintId) || undefined}
           className={cn(
-            "w-full rounded-2xl bg-zinc-950/70 border px-4 py-3 text-sm text-zinc-100",
-            "placeholder:text-zinc-600 transition-all backdrop-blur-md",
-            "focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50",
+            "w-full rounded-xl bg-white/[0.03] border px-4 py-3 text-sm text-zinc-100",
+            "placeholder:text-zinc-600 transition-all",
+            "focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500/40",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             trailing && "pr-12",
             error
-              ? "border-rose-500/50 focus:ring-rose-500/40 focus:border-rose-500/50"
-              : "border-white/10",
+              ? "border-rose-500/40 focus:ring-rose-500/30 focus:border-rose-500/40"
+              : "border-white/[0.06]",
             className
           )}
           {...props}

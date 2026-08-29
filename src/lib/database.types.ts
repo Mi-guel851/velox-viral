@@ -110,6 +110,7 @@ export type ProfileRow = {
   onboarding_step: OnboardingStep;
   onboarding_completed_at: string | null;
   default_platforms: string[];
+  security_phrase: string | null;
   notify_on_publish: boolean;
   notify_on_failure: boolean;
   created_at: string;
@@ -126,6 +127,7 @@ export type ProfileInsert = {
   onboarding_step?: OnboardingStep;
   onboarding_completed_at?: string | null;
   default_platforms?: string[];
+  security_phrase?: string | null;
   notify_on_publish?: boolean;
   notify_on_failure?: boolean;
 }

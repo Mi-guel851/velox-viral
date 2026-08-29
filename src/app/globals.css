@@ -4,65 +4,65 @@
 
 @layer base {
   :root {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
+    --background: 222 18% 5%;
+    --foreground: 210 20% 95%;
 
-    --card: 224 71% 7%;
-    --card-foreground: 210 40% 98%;
+    --card: 222 15% 8%;
+    --card-foreground: 210 20% 95%;
 
-    --popover: 224 71% 6%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 15% 7%;
+    --popover-foreground: 210 20% 95%;
 
-    --primary: 246 80% 64%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 38 92% 50%;
+    --primary-foreground: 222 18% 5%;
 
-    --secondary: 220 20% 14%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 14% 12%;
+    --secondary-foreground: 210 20% 95%;
 
-    --muted: 220 20% 16%;
-    --muted-foreground: 217.9 10.6% 64.9%;
+    --muted: 220 12% 14%;
+    --muted-foreground: 215 10% 55%;
 
-    --accent: 220 20% 18%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 220 14% 16%;
+    --accent-foreground: 210 20% 95%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 20% 95%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 246 80% 64%;
+    --border: 220 13% 16%;
+    --input: 220 13% 16%;
+    --ring: 38 92% 50%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
   }
 
   .light {
-    --background: 220 25% 97%;
-    --foreground: 222 47% 11%;
+    --background: 40 20% 97%;
+    --foreground: 222 30% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222 30% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 222 30% 10%;
 
-    --primary: 246 80% 60%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 38 92% 45%;
+    --primary-foreground: 222 18% 5%;
 
-    --secondary: 220 14% 94%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 40 10% 93%;
+    --secondary-foreground: 222 30% 10%;
 
-    --muted: 220 14% 92%;
-    --muted-foreground: 220 8% 46%;
+    --muted: 40 10% 91%;
+    --muted-foreground: 220 8% 42%;
 
-    --accent: 220 14% 92%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 40 10% 91%;
+    --accent-foreground: 222 30% 10%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 20% 95%;
 
-    --border: 220 13% 88%;
-    --input: 220 13% 88%;
-    --ring: 246 80% 60%;
+    --border: 40 10% 87%;
+    --input: 40 10% 87%;
+    --ring: 38 92% 45%;
   }
 }
 
@@ -71,91 +71,69 @@
     @apply border-border;
   }
 
-  /*
-   * The mesh gradient is applied to <body> by the root layout, so setting
-   * `bg-background` here as well produced two competing background-color
-   * declarations on the same element. Only the text/selection defaults belong
-   * here; the background is owned by .mesh-gradient-bg.
-   */
   body {
-    @apply text-foreground antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+    @apply text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: #0b0d13;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(251, 191, 36, 0.04), transparent),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(251, 191, 36, 0.02), transparent);
   }
 
-  /* Consistent, visible keyboard focus across every interactive element. */
+  ::selection {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fef3c7;
+  }
+
   :focus-visible {
-    outline: 2px solid rgb(129 140 248 / 0.8);
+    outline: 2px solid rgba(251, 191, 36, 0.6);
     outline-offset: 2px;
   }
 }
 
-/* Apple-style smooth glassmorphic utilities */
-.glass-panel {
-  background: rgba(18, 20, 29, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-}
-
-.glass-panel-light {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-}
-
-.glass-button {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
+/* Surface components */
+.surface-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-button:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
-  border-color: rgba(255, 255, 255, 0.22);
-  transform: translateY(-1px);
+.surface-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-.glass-button:active {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+.surface-elevated {
+  background: rgba(16, 18, 28, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.glow-indigo {
-  box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.4);
+.surface-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.glow-cyan {
-  box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.4);
-}
-
-.glow-rose {
-  box-shadow: 0 0 35px -5px rgba(244, 63, 94, 0.4);
+/* Grain texture overlay for depth */
+.grain-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.015;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -163,42 +141,19 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.16);
 }
 
-/* Mesh gradient background */
-.mesh-gradient-bg {
-  background-color: #08090d;
-  background-image: 
-    radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-    radial-gradient(at 90% 15%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 80%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
-    radial-gradient(at 80% 90%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
-}
-
-/* Hide scrollbar utility */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* ---------------------------------------------------------------------------
-   Skeleton loaders
-   A shimmering placeholder used while real data is in flight, so the premium
-   feel is preserved without ever rendering invented numbers.
-   --------------------------------------------------------------------------- */
+/* Skeleton loaders */
 .skeleton {
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 0.75rem;
 }
 
@@ -210,7 +165,7 @@
   background-image: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0.05) 50%,
     rgba(255, 255, 255, 0) 100%
   );
   animation: skeleton-shimmer 1.6s infinite;
@@ -222,10 +177,7 @@
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Accessibility: honour the OS "reduce motion" setting.
-   Decorative motion is disabled while everything stays fully usable.
-   --------------------------------------------------------------------------- */
+/* Accessibility: honour the OS "reduce motion" setting. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

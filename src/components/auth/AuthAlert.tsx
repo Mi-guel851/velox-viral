@@ -12,26 +12,25 @@ interface AuthAlertProps {
 
 const VARIANTS = {
   error: {
-    wrapper: "bg-rose-500/10 border-rose-500/25 text-rose-200",
+    wrapper: "bg-rose-500/10 border-rose-500/20 text-rose-200",
     icon: AlertCircle,
     iconColor: "text-rose-400",
     role: "alert" as const,
   },
   success: {
-    wrapper: "bg-emerald-500/10 border-emerald-500/25 text-emerald-200",
+    wrapper: "bg-emerald-500/10 border-emerald-500/20 text-emerald-200",
     icon: CheckCircle2,
     iconColor: "text-emerald-400",
     role: "status" as const,
   },
   info: {
-    wrapper: "bg-indigo-500/10 border-indigo-500/25 text-indigo-200",
+    wrapper: "bg-amber-500/[0.08] border-amber-500/15 text-amber-200",
     icon: Info,
-    iconColor: "text-indigo-400",
+    iconColor: "text-amber-400",
     role: "status" as const,
   },
 };
 
-/** Inline form-level banner for auth screens. */
 export const AuthAlert: React.FC<AuthAlertProps> = ({ variant, children, className }) => {
   const config = VARIANTS[variant];
   const Icon = config.icon;
@@ -41,7 +40,7 @@ export const AuthAlert: React.FC<AuthAlertProps> = ({ variant, children, classNa
       role={config.role}
       aria-live={variant === "error" ? "assertive" : "polite"}
       className={cn(
-        "flex items-start gap-2.5 p-3.5 rounded-2xl border text-xs leading-relaxed",
+        "flex items-start gap-2.5 p-3.5 rounded-xl border text-xs leading-relaxed",
         config.wrapper,
         className
       )}

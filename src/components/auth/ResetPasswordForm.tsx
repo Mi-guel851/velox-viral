@@ -2,25 +2,28 @@
 
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
-import { resetPasswordAction, type AuthActionResult } from "@/lib/auth/actions";
+import {
+  resetPasswordAction,
+  resetPasswordWithTokenAction,
+  type AuthActionResult,
+} from "@/lib/auth/actions";
 import { FormField } from "@/components/auth/FormField";
 import { AuthAlert } from "@/components/auth/AuthAlert";
 import { PasswordStrength } from "@/components/auth/PasswordStrength";
 import { Button } from "@/components/ui/button";
 
 interface ResetPasswordFormProps {
-  /**
-   * Whether the recovery link produced a valid session. False means the user
-   * navigated here directly or the link expired, so there is nothing to reset.
-   */
   hasRecoverySession: boolean;
 }
 
-/** Completes the recovery flow by setting a new password. */
 export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   hasRecoverySession,
 }) => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<AuthActionResult | null>(null);
   const [password, setPassword] = useState("");
@@ -30,39 +33,46 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
+    // Add the token if present.
+    if (token) {
+      formData.set("token", token);
+    }
+
     startTransition(async () => {
-      // Success redirects to the dashboard, so this only resolves on failure.
-      const response = await resetPasswordAction(formData);
+      // Choose the right action based on whether we have a token or a recovery session.
+      const action = token ? resetPasswordWithTokenAction : resetPasswordAction;
+      const response = await action(formData);
       setResult(response);
     });
   }
 
-  if (!hasRecoverySession) {
+  // No recovery session and no token — this is an invalid/expired link.
+  if (!hasRecoverySession && !token) {
     return (
       <div className="space-y-6">
         <header className="space-y-1.5">
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+          <h1 className="font-display text-2xl font-bold text-white tracking-tight">
             This link isn&apos;t valid
           </h1>
         </header>
 
         <AuthAlert variant="error">
           Password reset links expire after one hour and can only be used once.
-          Request a fresh link to continue.
+          Use your security phrase to recover your account instead.
         </AuthAlert>
 
         <div className="space-y-2.5">
           <Button
             asChild
             variant="gradient"
-            className="w-full h-11 rounded-2xl text-sm font-semibold"
+            className="w-full h-11 rounded-xl text-sm font-semibold"
           >
-            <Link href="/forgot-password">Request a new link</Link>
+            <Link href="/forgot-password">Recover with security phrase</Link>
           </Button>
           <Button
             asChild
             variant="ghost"
-            className="w-full h-11 rounded-2xl text-sm text-zinc-400 hover:text-white"
+            className="w-full h-11 rounded-xl text-sm text-zinc-400 hover:text-zinc-100"
           >
             <Link href="/login">Back to log in</Link>
           </Button>
@@ -74,10 +84,10 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   return (
     <div className="space-y-6">
       <header className="space-y-1.5">
-        <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-400 mb-3">
+        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center text-emerald-400 mb-3">
           <ShieldCheck className="w-5 h-5" />
         </div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">
+        <h1 className="font-display text-2xl font-bold text-white tracking-tight">
           Choose a new password
         </h1>
         <p className="text-sm text-zinc-400">
@@ -88,6 +98,8 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
       {result?.error && <AuthAlert variant="error">{result.error}</AuthAlert>}
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        {token && <input type="hidden" name="token" value={token} />}
+
         <div>
           <FormField
             label="New password"
@@ -105,7 +117,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="p-2 rounded-xl text-zinc-500 hover:text-zinc-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                className="p-2 rounded-lg text-zinc-500 hover:text-zinc-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -130,7 +142,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
           type="submit"
           variant="gradient"
           disabled={isPending}
-          className="w-full h-12 rounded-2xl text-sm font-semibold shadow-lg shadow-indigo-500/25"
+          className="w-full h-12 rounded-xl text-sm font-semibold"
         >
           {isPending ? (
             <>

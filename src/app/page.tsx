@@ -45,59 +45,62 @@ const FEATURES = [
     title: "One composer, seven channels",
     body:
       "Write a master draft and override any platform individually. Character limits, hashtag caps and media rules are validated per platform before anything is sent.",
-    accent: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+    color: "amber",
   },
   {
     icon: Eye,
     title: "Pixel-accurate previews",
     body:
-      "See exactly how a post renders on each network — phone, tablet and desktop, light and dark — before it goes out. No more publishing then checking.",
-    accent: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+      "See exactly how a post renders on each network — phone, tablet and desktop, light and dark — before it goes out.",
+    color: "zinc",
   },
   {
     icon: Repeat2,
     title: "1-to-7 repurposing",
     body:
       "Paste an article, transcript or set of notes. Get a native format for every channel: a thread, a carousel caption, a short-form script, a discussion prompt.",
-    accent: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+    color: "amber",
   },
   {
     icon: CalendarClock,
-    title: "Scheduling that runs server-side",
+    title: "Server-side scheduling",
     body:
-      "Queue a post and close your laptop. Publishing happens on our servers with retries and per-platform status, so nothing depends on a browser tab staying open.",
-    accent: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+      "Queue a post and close your laptop. Publishing happens on our servers with retries and per-platform status.",
+    color: "zinc",
   },
   {
     icon: BarChart3,
-    title: "Analytics pulled from the source",
+    title: "Real analytics, not estimates",
     body:
-      "Impressions, reach, saves, clicks and follower growth read straight from each platform's API and normalised into one model. Empty until you connect an account — never estimated.",
-    accent: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+      "Impressions, reach, saves, clicks and follower growth pulled straight from each platform's API. Never estimated.",
+    color: "amber",
   },
   {
     icon: Bell,
-    title: "Told when it actually happens",
+    title: "Backend-confirmed events",
     body:
-      "Notifications fire on real backend events: published, partially published, failed, token expiring. A success message means the platform confirmed it.",
-    accent: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+      "Notifications fire on real events: published, partially published, failed, token expiring. A success means the platform confirmed it.",
+    color: "zinc",
   },
 ];
 
 const STEPS = [
   {
+    number: "01",
     icon: Link2,
     title: "Connect your channels",
     body:
-      "Authorise each network over OAuth. Tokens are encrypted before they touch the database and are never exposed to the browser.",
+      "Authorise each network over OAuth. Tokens are encrypted before they touch the database and never exposed to the browser.",
   },
   {
+    number: "02",
     icon: Sparkles,
     title: "Compose and adapt",
     body:
       "Draft once, then let the AI studio generate hooks, captions and hashtags tuned to the platform you're targeting.",
   },
   {
+    number: "03",
     icon: Rocket,
     title: "Publish or queue",
     body:
@@ -108,19 +111,23 @@ const STEPS = [
 const FAQS = [
   {
     q: "Do I need developer accounts for each social network?",
-    a: "To publish, yes — every network requires its own app credentials, and that is a platform rule rather than ours. Velox Viral ships the full integration for each one; you add the credentials in your environment and the channel activates immediately. Any channel you haven't configured tells you exactly which variables it needs instead of pretending to be connected.",
+    a: "To publish, yes — every network requires its own app credentials, and that is a platform rule rather than ours. Velox Viral ships the full integration for each one; you add the credentials in your environment and the channel activates immediately.",
   },
   {
     q: "Where do the analytics numbers come from?",
-    a: "Each platform's own insights API. We collect, normalise and store them so trends survive across platforms and time. Before you connect an account there is nothing to show, and the dashboard says so rather than displaying a placeholder figure.",
+    a: "Each platform's own insights API. We collect, normalise and store them so trends survive across platforms and time. Before you connect an account there is nothing to show, and the dashboard says so.",
   },
   {
     q: "What happens if a scheduled post fails on one platform?",
-    a: "Each platform is tracked as a separate target with its own status, error and retry count. If X succeeds and Instagram rejects the caption, the post is marked partially published, you're notified about the specific failure, and you can retry just that channel.",
+    a: "Each platform is tracked as a separate target with its own status, error and retry count. If X succeeds and Instagram rejects the caption, the post is marked partially published, you're notified, and you can retry just that channel.",
+  },
+  {
+    q: "How do I recover my account if I forget my password?",
+    a: "During signup you set a security phrase — something personal you'll remember. If you forget your password, enter your email and that phrase to verify your identity and set a new one. No email link required.",
   },
   {
     q: "How are my access tokens stored?",
-    a: "Encrypted with AES-256-GCM in the application layer, held in a table that no browser session can read under any circumstances, and used only by server-side publishing code. The encryption key lives in your environment, never in the database.",
+    a: "Encrypted with AES-256-GCM in the application layer, held in a table that no browser session can read, and used only by server-side publishing code. The encryption key lives in your environment, never in the database.",
   },
   {
     q: "Can I cancel or change plan?",
@@ -129,8 +136,6 @@ const FAQS = [
 ];
 
 export default function LandingPage() {
-  // Prices are shown in whatever currency Paystack is configured to charge, so
-  // the pricing grid can never advertise a different currency than the checkout.
   const currency = serverEnv.PAYSTACK_CURRENCY ?? DEFAULT_BILLING_CURRENCY;
 
   return (
@@ -140,33 +145,34 @@ export default function LandingPage() {
       {/* ------------------------------------------------------------------ */}
       {/* Hero                                                                */}
       {/* ------------------------------------------------------------------ */}
-      <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden">
+      <section className="relative pt-36 sm:pt-44 pb-20 sm:pb-28 px-4 sm:px-6 overflow-hidden">
+        {/* Subtle radial glow — warm, not neon */}
         <div
           aria-hidden
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-b from-indigo-500/10 via-purple-500/5 to-transparent blur-3xl pointer-events-none"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-amber-500/[0.06] via-transparent to-transparent blur-3xl pointer-events-none"
         />
 
-        <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="space-y-7">
+        <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="space-y-8">
             <Reveal>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/25">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400/90 border border-amber-500/15">
                 <Sparkles className="w-3.5 h-3.5" />
                 AI social operating system
-              </span>
+              </div>
             </Reveal>
 
             <Reveal delay={0.06}>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white tracking-[-0.02em] leading-[1.08]">
                 Write once.
                 <br />
-                <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <span className="text-amber-400">
                   Publish everywhere.
                 </span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.12}>
-              <p className="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-xl">
+              <p className="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-lg">
                 {BRAND.name} turns a single draft into platform-native posts for seven
                 networks, schedules them server-side, and reports what genuinely
                 published — per channel, with real numbers.
@@ -179,7 +185,7 @@ export default function LandingPage() {
                   asChild
                   variant="gradient"
                   size="lg"
-                  className="h-13 px-7 rounded-2xl text-sm font-semibold shadow-xl shadow-indigo-500/25"
+                  className="h-12 px-7 rounded-xl text-sm font-semibold"
                 >
                   <Link href="/signup">
                     <span>Create free account</span>
@@ -191,7 +197,7 @@ export default function LandingPage() {
                   asChild
                   variant="apple"
                   size="lg"
-                  className="h-13 px-7 rounded-2xl text-sm font-semibold"
+                  className="h-12 px-7 rounded-xl text-sm"
                 >
                   <Link href="/login">I already have an account</Link>
                 </Button>
@@ -201,11 +207,11 @@ export default function LandingPage() {
             <Reveal delay={0.24}>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-zinc-500">
                 <span className="inline-flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <Check className="w-3.5 h-3.5 text-amber-500/80" />
                   Free plan, no card required
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-500/80" />
                   Encrypted tokens, row-level isolation
                 </span>
               </div>
@@ -219,32 +225,34 @@ export default function LandingPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* Platforms                                                           */}
+      {/* Platforms — horizontal scroll on mobile, grid on desktop             */}
       {/* ------------------------------------------------------------------ */}
-      <section id="platforms" className="py-14 px-4 sm:px-6 scroll-mt-24">
+      <section id="platforms" className="py-16 px-4 sm:px-6 scroll-mt-24">
         <div className="max-w-6xl mx-auto">
           <Reveal>
-            <p className="text-center text-xs font-semibold text-zinc-500 uppercase tracking-[0.2em] mb-8">
+            <p className="text-center text-[11px] font-semibold text-zinc-500 uppercase tracking-[0.25em] mb-10">
               One draft. Seven native formats.
             </p>
           </Reveal>
 
           <Reveal delay={0.08}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 sm:pb-0 sm:grid sm:grid-cols-4 lg:grid-cols-7 sm:overflow-visible">
               {ALL_PLATFORMS.map((platform) => {
                 const config = PLATFORMS[platform];
                 return (
                   <div
                     key={platform}
-                    className="glass-card rounded-2xl p-4 border border-white/[0.07] flex flex-col items-center justify-center gap-2 text-center"
+                    className="surface-card rounded-xl px-4 py-3.5 flex items-center gap-3 min-w-[140px] sm:min-w-0 sm:flex-col sm:items-center sm:gap-2 sm:text-center sm:px-3"
                   >
-                    <PlatformIcon platform={platform} className="w-6 h-6 text-zinc-200" />
-                    <span className="text-[11px] font-semibold text-zinc-300 leading-tight">
-                      {config.name}
-                    </span>
-                    <span className="text-[9px] font-mono text-zinc-500">
-                      {config.maxCharacters.toLocaleString("en-US")} chars
-                    </span>
+                    <PlatformIcon platform={platform} className="w-5 h-5 text-zinc-300 shrink-0" />
+                    <div className="sm:space-y-0.5">
+                      <span className="text-[11px] font-semibold text-zinc-200 leading-tight block">
+                        {config.name}
+                      </span>
+                      <span className="text-[9px] font-mono text-zinc-600 block">
+                        {config.maxCharacters.toLocaleString("en-US")} chars
+                      </span>
+                    </div>
                   </div>
                 );
               })}
@@ -254,40 +262,47 @@ export default function LandingPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* Features                                                            */}
+      {/* Features — two-column editorial layout, not a card grid             */}
       {/* ------------------------------------------------------------------ */}
-      <section id="features" className="py-20 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-7xl mx-auto space-y-12">
+      <section id="features" className="py-24 px-4 sm:px-6 scroll-mt-24">
+        <div className="max-w-6xl mx-auto">
           <Reveal>
-            <div className="max-w-2xl space-y-3">
-              <span className="text-xs font-semibold text-indigo-400 uppercase tracking-[0.2em]">
+            <div className="max-w-2xl mb-16">
+              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
                 Features
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-                Everything real. Nothing simulated.
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
+                Everything real.
+                <br />
+                Nothing simulated.
               </h2>
-              <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
+              <p className="mt-4 text-sm text-zinc-400 leading-relaxed max-w-lg">
                 Every number comes from a platform API, every publish is confirmed by
-                the network before we call it published, and every button either does
-                something or tells you what it needs.
+                the network before we call it published.
               </p>
             </div>
           </Reveal>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-2 gap-px bg-white/[0.04] rounded-2xl overflow-hidden">
             {FEATURES.map((feature, index) => (
-              <Reveal key={feature.title} delay={index * 0.06}>
-                <div className="glass-card rounded-3xl p-6 border border-white/10 h-full space-y-3.5">
-                  <div
-                    className={cn(
-                      "w-11 h-11 rounded-2xl flex items-center justify-center border",
-                      feature.accent
-                    )}
-                  >
-                    <feature.icon className="w-5 h-5" />
+              <Reveal key={feature.title} delay={index * 0.05}>
+                <div className="bg-[#0b0d13] p-7 sm:p-8 space-y-4 group hover:bg-white/[0.015] transition-colors duration-300">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={cn(
+                        "w-9 h-9 rounded-lg flex items-center justify-center",
+                        feature.color === "amber"
+                          ? "bg-amber-500/10 text-amber-400"
+                          : "bg-white/[0.04] text-zinc-400"
+                      )}
+                    >
+                      <feature.icon className="w-4.5 h-4.5" />
+                    </div>
+                    <h3 className="font-display text-[15px] font-semibold text-white">
+                      {feature.title}
+                    </h3>
                   </div>
-                  <h3 className="text-base font-bold text-white">{feature.title}</h3>
-                  <p className="text-xs sm:text-[13px] text-zinc-400 leading-relaxed">
+                  <p className="text-[13px] text-zinc-400 leading-relaxed">
                     {feature.body}
                   </p>
                 </div>
@@ -298,35 +313,44 @@ export default function LandingPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* How it works                                                        */}
+      {/* How it works — numbered steps with connecting line                  */}
       {/* ------------------------------------------------------------------ */}
-      <section id="how-it-works" className="py-20 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-6xl mx-auto space-y-12">
+      <section id="how-it-works" className="py-24 px-4 sm:px-6 scroll-mt-24">
+        <div className="max-w-5xl mx-auto">
           <Reveal>
-            <div className="max-w-2xl space-y-3">
-              <span className="text-xs font-semibold text-purple-400 uppercase tracking-[0.2em]">
+            <div className="text-center mb-16">
+              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
                 How it works
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
                 Three steps to a running channel
               </h2>
             </div>
           </Reveal>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="relative grid md:grid-cols-3 gap-8 md:gap-6">
+            {/* Connecting line — desktop only */}
+            <div className="hidden md:block absolute top-[52px] left-[16.7%] right-[16.7%] h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+
             {STEPS.map((step, index) => (
               <Reveal key={step.title} delay={index * 0.1}>
-                <div className="relative glass-card rounded-3xl p-6 border border-white/10 h-full space-y-3.5">
-                  <span className="absolute top-5 right-6 text-4xl font-extrabold text-white/[0.06] select-none">
-                    {index + 1}
-                  </span>
-                  <div className="w-11 h-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-indigo-400">
-                    <step.icon className="w-5 h-5" />
+                <div className="relative text-center space-y-5">
+                  <div className="relative inline-flex">
+                    <div className="w-[52px] h-[52px] rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
+                      <step.icon className="w-5 h-5 text-amber-400/80" />
+                    </div>
+                    <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-amber-500 text-zinc-950 text-[10px] font-bold flex items-center justify-center">
+                      {index + 1}
+                    </span>
                   </div>
-                  <h3 className="text-base font-bold text-white">{step.title}</h3>
-                  <p className="text-xs sm:text-[13px] text-zinc-400 leading-relaxed">
-                    {step.body}
-                  </p>
+                  <div>
+                    <h3 className="font-display text-[15px] font-semibold text-white mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-[13px] text-zinc-400 leading-relaxed max-w-xs mx-auto">
+                      {step.body}
+                    </p>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -337,24 +361,23 @@ export default function LandingPage() {
       {/* ------------------------------------------------------------------ */}
       {/* Pricing                                                             */}
       {/* ------------------------------------------------------------------ */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-6xl mx-auto space-y-12">
+      <section id="pricing" className="py-24 px-4 sm:px-6 scroll-mt-24">
+        <div className="max-w-5xl mx-auto">
           <Reveal>
-            <div className="max-w-2xl space-y-3">
-              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-[0.2em]">
+            <div className="text-center mb-14">
+              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
                 Pricing
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
                 Start free. Upgrade when you outgrow it.
               </h2>
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                Limits are enforced on the server, so what a plan says is what a plan
-                does.
+              <p className="mt-3 text-sm text-zinc-400">
+                Limits are enforced on the server, so what a plan says is what a plan does.
               </p>
             </div>
           </Reveal>
 
-          <div className="grid md:grid-cols-3 gap-5 items-start">
+          <div className="grid md:grid-cols-3 gap-4 items-start">
             {PLAN_ORDER.map((planId, index) => {
               const plan = PLANS[planId];
               const isPaid = planAmount(plan, currency) > 0;
@@ -362,37 +385,37 @@ export default function LandingPage() {
                 <Reveal key={plan.id} delay={index * 0.08}>
                   <div
                     className={cn(
-                      "relative rounded-3xl p-6 h-full flex flex-col space-y-5",
+                      "relative rounded-2xl p-6 h-full flex flex-col space-y-5 transition-all duration-300",
                       plan.highlighted
-                        ? "glass-panel border border-indigo-500/40 shadow-2xl shadow-indigo-500/10"
-                        : "glass-card border border-white/10"
+                        ? "bg-amber-500/[0.06] border border-amber-500/20 shadow-lg shadow-amber-500/5"
+                        : "surface-card"
                     )}
                   >
                     {plan.highlighted && (
-                      <span className="absolute -top-3 left-6 px-2.5 py-1 rounded-full text-[10px] font-bold bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg">
-                        MOST POPULAR
+                      <span className="absolute -top-2.5 left-6 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-zinc-950">
+                        POPULAR
                       </span>
                     )}
 
                     <div className="space-y-1.5">
-                      <h3 className="text-lg font-bold text-white">{plan.name}</h3>
+                      <h3 className="font-display text-lg font-bold text-white">{plan.name}</h3>
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-4xl font-extrabold text-white tracking-tight">
+                        <span className="font-display text-3xl font-bold text-white tracking-tight">
                           {formatPlanPrice(plan, currency)}
                         </span>
                         {isPaid && (
                           <span className="text-xs text-zinc-500 font-medium">/month</span>
                         )}
                       </div>
-                      <p className="text-xs text-zinc-400 leading-relaxed">
+                      <p className="text-xs text-zinc-500 leading-relaxed">
                         {plan.tagline}
                       </p>
                     </div>
 
-                    <ul className="space-y-2 flex-1">
+                    <ul className="space-y-2.5 flex-1">
                       {plan.features.map((feature) => (
                         <li key={feature} className="flex items-start gap-2">
-                          <Check className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
+                          <Check className="w-3.5 h-3.5 text-amber-500/70 mt-0.5 shrink-0" />
                           <span className="text-xs text-zinc-300 leading-relaxed">
                             {feature}
                           </span>
@@ -403,7 +426,7 @@ export default function LandingPage() {
                     <Button
                       asChild
                       variant={plan.highlighted ? "gradient" : "apple"}
-                      className="w-full rounded-2xl h-11 text-sm font-semibold"
+                      className="w-full rounded-xl h-11 text-sm font-semibold"
                     >
                       <Link href="/signup">
                         {isPaid ? `Choose ${plan.name}` : "Get started free"}
@@ -418,36 +441,36 @@ export default function LandingPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* FAQ — native <details> so this section needs no JavaScript           */}
+      {/* FAQ — native <details> so this section needs no JavaScript          */}
       {/* ------------------------------------------------------------------ */}
-      <section id="faq" className="py-20 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-3xl mx-auto space-y-10">
+      <section id="faq" className="py-24 px-4 sm:px-6 scroll-mt-24">
+        <div className="max-w-2xl mx-auto">
           <Reveal>
-            <div className="space-y-3 text-center">
-              <span className="text-xs font-semibold text-cyan-400 uppercase tracking-[0.2em]">
+            <div className="text-center mb-12">
+              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
                 FAQ
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
                 Straight answers
               </h2>
             </div>
           </Reveal>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {FAQS.map((faq, index) => (
-              <Reveal key={faq.q} delay={index * 0.05}>
-                <details className="group glass-card rounded-2xl border border-white/10 overflow-hidden">
-                  <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-2xl">
-                    <span className="text-sm font-semibold text-white">{faq.q}</span>
+              <Reveal key={faq.q} delay={index * 0.04}>
+                <details className="group surface-card rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl">
+                    <span className="text-sm font-semibold text-zinc-200">{faq.q}</span>
                     <span
                       aria-hidden
-                      className="shrink-0 w-6 h-6 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                      className="shrink-0 w-6 h-6 rounded-md bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-zinc-500 transition-transform duration-200 group-open:rotate-45"
                     >
                       <span className="text-base leading-none">+</span>
                     </span>
                   </summary>
                   <div className="px-5 pb-5 -mt-1">
-                    <p className="text-xs sm:text-[13px] text-zinc-400 leading-relaxed">
+                    <p className="text-[13px] text-zinc-400 leading-relaxed">
                       {faq.a}
                     </p>
                   </div>
@@ -461,22 +484,25 @@ export default function LandingPage() {
       {/* ------------------------------------------------------------------ */}
       {/* Closing CTA                                                         */}
       {/* ------------------------------------------------------------------ */}
-      <section className="py-20 px-4 sm:px-6">
+      <section className="py-24 px-4 sm:px-6">
         <Reveal>
-          <div className="relative max-w-5xl mx-auto glass-panel rounded-[2rem] border border-white/10 p-8 sm:p-14 text-center overflow-hidden">
+          <div className="relative max-w-4xl mx-auto rounded-2xl border border-white/[0.06] p-8 sm:p-14 text-center overflow-hidden">
+            {/* Warm ambient glow */}
             <div
               aria-hidden
-              className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-indigo-500/20 via-purple-500/10 to-transparent blur-3xl pointer-events-none"
+              className="absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[350px] bg-gradient-to-b from-amber-500/[0.08] via-transparent to-transparent blur-3xl pointer-events-none"
             />
             <div className="relative space-y-6">
-              <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white shadow-xl shadow-indigo-500/30 ring-1 ring-white/20 mx-auto">
-                <Zap className="w-7 h-7 fill-white" />
+              <div className="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-zinc-950 mx-auto">
+                <Zap className="w-6 h-6 fill-zinc-950" />
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-                Stop rewriting the same post seven times
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
+                Stop rewriting the same post
+                <br className="hidden sm:block" />
+                {" "}seven times
               </h2>
-              <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto leading-relaxed">
+              <p className="text-sm sm:text-base text-zinc-400 max-w-md mx-auto leading-relaxed">
                 Create an account, connect a channel, and publish your first
                 cross-platform post in a few minutes.
               </p>
@@ -486,7 +512,7 @@ export default function LandingPage() {
                   asChild
                   variant="gradient"
                   size="lg"
-                  className="h-13 px-8 rounded-2xl text-sm font-semibold shadow-xl shadow-indigo-500/25"
+                  className="h-12 px-8 rounded-xl text-sm font-semibold"
                 >
                   <Link href="/signup">
                     <span>Create free account</span>
@@ -497,7 +523,7 @@ export default function LandingPage() {
                   asChild
                   variant="apple"
                   size="lg"
-                  className="h-13 px-8 rounded-2xl text-sm font-semibold"
+                  className="h-12 px-8 rounded-xl text-sm"
                 >
                   <Link href="/login">Log in</Link>
                 </Button>
@@ -510,7 +536,7 @@ export default function LandingPage() {
       {/* ------------------------------------------------------------------ */}
       {/* Footer                                                              */}
       {/* ------------------------------------------------------------------ */}
-      <footer className="border-t border-white/[0.07] py-10 px-4 sm:px-6">
+      <footer className="border-t border-white/[0.04] py-10 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
           <Logo size="sm" withTagline />
 

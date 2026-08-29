@@ -4,7 +4,7 @@ import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 import { isSupabaseConfigured } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: "Reset your password",
+  title: "Recover your account",
   robots: { index: false, follow: false },
 };
 
