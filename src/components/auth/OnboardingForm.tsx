@@ -19,12 +19,14 @@ export const OnboardingForm: React.FC = () => {
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<AuthActionResult | null>(null);
   const [phrase, setPhrase] = useState("");
+  const [workspaceName, setWorkspaceName] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     formData.set("securityPhrase", phrase);
+    formData.set("workspaceName", workspaceName);
 
     startTransition(async () => {
       // On success this redirects to /dashboard, so this only resolves on failure.
@@ -53,6 +55,36 @@ export const OnboardingForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {result?.error && <AuthAlert variant="error">{result.error}</AuthAlert>}
+
+      <div className="space-y-2">
+        <label
+          htmlFor="workspace-name"
+          className="block text-xs font-semibold text-zinc-300 tracking-wide"
+        >
+          Workspace name
+        </label>
+        <input
+          id="workspace-name"
+          type="text"
+          value={workspaceName}
+          onChange={(e) => setWorkspaceName(e.target.value)}
+          placeholder="e.g. My Creator Studio"
+          required
+          minLength={2}
+          maxLength={60}
+          disabled={isPending}
+          className={cn(
+            "w-full rounded-xl bg-white/[0.03] border px-4 py-3 text-sm text-zinc-100",
+            "placeholder:text-zinc-600 transition-all",
+            "focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500/40",
+            "disabled:opacity-50 disabled:cursor-not-allowed",
+            "border-white/[0.06]"
+          )}
+        />
+        <p className="text-[11px] text-zinc-500 leading-relaxed">
+          This is your workspace display name shown across the app.
+        </p>
+      </div>
 
       <div className="space-y-2">
         <label
@@ -116,7 +148,7 @@ export const OnboardingForm: React.FC = () => {
       <Button
         type="submit"
         variant="gradient"
-        disabled={isPending || phrase.trim().length < 3}
+        disabled={isPending || phrase.trim().length < 3 || workspaceName.trim().length < 2}
         className="w-full h-12 rounded-xl text-sm font-semibold"
       >
         {isPending ? (

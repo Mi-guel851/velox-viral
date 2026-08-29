@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -17,6 +17,10 @@ import {
   Scissors,
   PlusCircle,
   SlidersHorizontal,
+  Upload,
+  Image as ImageIcon,
+  X,
+  Camera,
 } from "lucide-react";
 import { Platform } from "@/lib/types";
 import { AIService, CaptionVariation } from "@/lib/ai/ai-service";
@@ -56,6 +60,67 @@ export const AICaptionStudio: React.FC = () => {
   const [variations, setVariations] = useState<CaptionVariation[]>([]);
   const [generatedHooks, setGeneratedHooks] = useState<{ hook: string; score: number; category: string }[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadedMimeType, setUploadedMimeType] = useState<string>("image/jpeg");
+  const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Image must be under 10MB");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      setUploadedImage(base64);
+      setUploadedMimeType(file.type);
+      toast.success("Image uploaded! Click \"Generate from Image\" to create captions.");
+    };
+    reader.readAsDataURL(file);
+  }, []);
+
+  const handleRemoveImage = useCallback(() => {
+    setUploadedImage(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }, []);
+
+  const handleGenerateFromImage = async () => {
+    if (!uploadedImage) {
+      toast.error("Please upload an image first");
+      return;
+    }
+
+    setIsAnalyzingImage(true);
+    setIsGenerating(true);
+    try {
+      const result = await AIService.generateFromImage(
+        uploadedImage,
+        uploadedMimeType,
+        {
+          topic,
+          platform: selectedPlatform,
+          tone: selectedTone,
+        }
+      );
+      setVariations(result.captions);
+      toast.success(`Image analyzed! Generated ${result.captions.length} captions based on your photo.`);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to analyze image. Check your AI provider settings.");
+    } finally {
+      setIsAnalyzingImage(false);
+      setIsGenerating(false);
+    }
+  };
 
   const handleGenerateVariations = async () => {
     if (!topic.trim()) {
@@ -232,6 +297,66 @@ export const AICaptionStudio: React.FC = () => {
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Image Upload for AI Analysis */}
+            <div className="pt-2 border-t border-white/10 space-y-2">
+              <label className="text-xs font-semibold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Camera className="w-3.5 h-3.5 text-cyan-400" />
+                Generate from Image
+              </label>
+              <p className="text-[10px] text-zinc-500 leading-relaxed">
+                Upload a photo and AI will analyze it to create captions. The image is only analyzed temporarily and never stored.
+              </p>
+
+              {uploadedImage ? (
+                <div className="relative">
+                  <div className="w-full h-32 rounded-2xl overflow-hidden border border-white/10 bg-zinc-950">
+                    <img
+                      src={`data:${uploadedMimeType};base64,${uploadedImage}`}
+                      alt="Uploaded for analysis"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <button
+                    onClick={handleRemoveImage}
+                    className="absolute top-2 right-2 bg-black/70 text-white rounded-full p-1 hover:bg-rose-500 transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                  <Button
+                    variant="gradient"
+                    size="sm"
+                    onClick={handleGenerateFromImage}
+                    disabled={isGenerating || isAnalyzingImage}
+                    className="w-full mt-2 h-9 rounded-xl text-xs flex items-center justify-center gap-2"
+                  >
+                    {isAnalyzingImage ? (
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-3.5 h-3.5" />
+                    )}
+                    <span>{isAnalyzingImage ? "Analyzing Image..." : "Generate Captions from Image"}</span>
+                  </Button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => fileInputRef.current?.click()
+                  }
+                  className="w-full p-4 rounded-2xl border-2 border-dashed border-white/10 hover:border-cyan-400/50 bg-white/[0.02] hover:bg-cyan-500/5 transition-all flex flex-col items-center gap-2 text-zinc-400 hover:text-cyan-300"
+                >
+                  <Upload className="w-5 h-5" />
+                  <span className="text-xs font-medium">Click to upload an image</span>
+                  <span className="text-[10px] text-zinc-500">JPG, PNG, WebP up to 10MB</span>
+                </button>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
             </div>
 
             {/* Hook Generator Shortcut */}

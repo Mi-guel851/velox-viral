@@ -21,6 +21,7 @@ import {
 import { useAppStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 interface NavItem {
   id: "dashboard" | "composer" | "studio" | "repurpose" | "calendar" | "library" | "analytics" | "accounts" | "settings";
@@ -52,6 +53,7 @@ export const AppSidebar: React.FC = () => {
     accounts,
   } = useAppStore();
 
+  const { displayName, avatarUrl, loading: profileLoading } = useUserProfile();
   const connectedCount = accounts.filter((a) => a.status === "connected").length;
 
   return (
@@ -176,14 +178,14 @@ export const AppSidebar: React.FC = () => {
           )}
         >
           <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
+            src={avatarUrl}
             alt="User avatar"
             className="w-8 h-8 rounded-full object-cover ring-1 ring-white/20 shrink-0"
           />
           {!sidebarCollapsed && (
             <div className="min-w-0 flex-1">
               <span className="text-xs font-bold text-white block truncate">
-                {settings.workspaceName}
+                {displayName}
               </span>
               <span className="text-[10px] text-zinc-400 block truncate">
                 {connectedCount > 0 ? `${connectedCount} Channel${connectedCount !== 1 ? "s" : ""} Connected` : "No channels connected"}

@@ -140,17 +140,63 @@ export const MultiPlatformComposer: React.FC = () => {
 
     setIsPublishing(true);
     try {
-      await publishPostImmediately();
-      confetti({
-        particleCount: 80,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ["#6366f1", "#06b6d4", "#ec4899", "#10b981"],
+      const res = await fetch("/api/posts/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: composer.defaultContent,
+          platformContent: composer.platformContent,
+          targetPlatforms: composer.targetPlatforms,
+          mediaUrls: composer.mediaUrls,
+          title: composer.title,
+          firstComment: composer.firstComment,
+        }),
       });
-      toast.success("🚀 Post published successfully across selected platforms!");
-      resetComposer();
-    } catch (e) {
-      toast.error("Publishing error");
+
+      const data = await res.json();
+
+      if (data.success || data.partial) {
+        await publishPostImmediately();
+        confetti({
+          particleCount: 80,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ["#6366f1", "#06b6d4", "#ec4899", "#10b981"],
+        });
+
+        // Show per-platform results
+        if (data.results) {
+          const platforms = Object.entries(data.results) as [string, any][];
+          const succeeded = platforms.filter(([, r]) => r.success);
+          const failed = platforms.filter(([, r]) => !r.success);
+
+          if (succeeded.length > 0) {
+            toast.success(
+              `🚀 Published to ${succeeded.map(([p]) => p).join(", ")}!`
+            );
+          }
+          if (failed.length > 0) {
+            for (const [platform, result] of failed) {
+              toast.error(`${platform}: ${result.error || "Publishing failed"}`);
+            }
+          }
+        } else {
+          toast.success("🚀 Post published successfully!");
+        }
+
+        resetComposer();
+      } else {
+        toast.error(data.message || "Publishing failed. Check your platform connections.");
+        if (data.results) {
+          Object.entries(data.results).forEach(([platform, result]: [string, any]) => {
+            if (!result.success && result.error) {
+              toast.error(`${platform}: ${result.error}`);
+            }
+          });
+        }
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Publishing error — check your platform connections.");
     } finally {
       setIsPublishing(false);
     }

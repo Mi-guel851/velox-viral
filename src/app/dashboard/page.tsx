@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppBottomNav } from "@/components/layout/AppBottomNav";
@@ -16,8 +16,23 @@ import { AnalyticsView } from "@/components/analytics/AnalyticsView";
 import { ConnectedAccounts } from "@/components/accounts/ConnectedAccounts";
 import { SettingsModal } from "@/components/settings/SettingsModal";
 
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
 export default function DashboardPage() {
-  const { activeTab } = useAppStore();
+  const { activeTab, settings, updateSettings } = useAppStore();
+
+  // On first load after onboarding, pick up workspace name from cookie
+  useEffect(() => {
+    const workspaceName = getCookie("velox_workspace_name");
+    if (workspaceName && workspaceName !== settings.workspaceName) {
+      updateSettings({ workspaceName });
+      // Clear the cookie after consuming it
+      document.cookie = "velox_workspace_name=; path=/; max-age=0";
+    }
+  }, []);
 
   const renderActiveView = () => {
     switch (activeTab) {

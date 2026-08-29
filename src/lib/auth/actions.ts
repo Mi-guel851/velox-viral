@@ -191,6 +191,8 @@ export async function saveSecurityPhraseAction(formData: FormData): Promise<Auth
     };
   }
 
+  const workspaceName = (formData.get("workspaceName") as string)?.trim() || "My Workspace";
+
   const supabase = await createServerSupabaseClient();
 
   const {
@@ -214,6 +216,16 @@ export async function saveSecurityPhraseAction(formData: FormData): Promise<Auth
     console.error("[auth] saveSecurityPhrase:", error.message);
     return { ok: false, error: "Could not save your security phrase. Please try again." };
   }
+
+  // Store workspace name in a cookie so the client can pick it up
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+  cookieStore.set("velox_workspace_name", workspaceName, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    httpOnly: false,
+    sameSite: "lax",
+  });
 
   revalidatePath("/", "layout");
   redirect("/dashboard");

@@ -6,22 +6,11 @@ import {
   Settings,
   Database,
   Cpu,
-  Clock,
-  Sparkles,
-  Key,
-  ShieldCheck,
-  Check,
-  Copy,
-  Download,
-  Trash2,
-  RefreshCw,
-  Sun,
-  Moon,
   Save,
-  Code2,
+  Download,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { SUPABASE_SCHEMA_SQL, isSupabaseConfigured } from "@/lib/supabase";
+import { isSupabaseConfigured } from "@/lib/supabase";
 import { ALL_PLATFORMS, PLATFORMS } from "@/lib/platforms/constants";
 import { PlatformIcon } from "@/components/ui/platform-icons";
 import { Button } from "@/components/ui/button";
@@ -39,12 +28,8 @@ export const SettingsModal: React.FC = () => {
   const [anthropicKey, setAnthropicKey] = useState(settings.aiKeys?.anthropic || "");
   const [geminiKey, setGeminiKey] = useState(settings.aiKeys?.gemini || "");
   const [groqKey, setGroqKey] = useState(settings.aiKeys?.groq || "");
-  const [supabaseUrl, setSupabaseUrl] = useState(settings.supabaseUrl || "");
-  const [supabaseKey, setSupabaseKey] = useState(settings.supabaseAnonKey || "");
-  const [watermark, setWatermark] = useState(settings.customWatermarkText);
-  const [copiedSql, setCopiedSql] = useState(false);
-  const [showSqlSchema, setShowSqlSchema] = useState(false);
 
+  const [watermark, setWatermark] = useState(settings.customWatermarkText);
   const handleSaveSettings = () => {
     updateSettings({
       workspaceName,
@@ -56,18 +41,10 @@ export const SettingsModal: React.FC = () => {
         gemini: geminiKey,
         groq: groqKey,
       },
-      supabaseUrl,
-      supabaseAnonKey: supabaseKey,
+
       customWatermarkText: watermark,
     });
     toast.success("Workspace settings updated successfully!");
-  };
-
-  const handleCopySql = () => {
-    navigator.clipboard.writeText(SUPABASE_SCHEMA_SQL);
-    setCopiedSql(true);
-    toast.success("Supabase SQL Schema copied to clipboard!");
-    setTimeout(() => setCopiedSql(false), 2500);
   };
 
   const handleExportData = () => {
@@ -157,84 +134,23 @@ export const SettingsModal: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Supabase Integration */}
+      {/* 2. Database Status */}
       <div className="glass-card rounded-3xl p-5 sm:p-6 border border-white/10 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Database className="w-5 h-5 text-emerald-400" />
-            <h3 className="text-base font-bold text-white">Supabase Database Integration</h3>
+            <h3 className="text-base font-bold text-white">Database Connection</h3>
           </div>
           <Badge variant={isSupabaseConfigured() ? "success" : "default"}>
-            {isSupabaseConfigured() ? "Cloud Synced" : "Local Storage Engine (Active)"}
+            {isSupabaseConfigured() ? "Connected" : "Not configured"}
           </Badge>
         </div>
 
         <p className="text-xs text-zinc-400 leading-relaxed">
-          ViralFlow operates with high-speed local persistence by default and syncs directly to your Supabase PostgreSQL cluster when credentials are provided.
+          {isSupabaseConfigured()
+            ? "Your Supabase database is connected and syncing data."
+            : "Database credentials are configured by your administrator via environment variables."}
         </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1.5">
-              Supabase Project URL
-            </label>
-            <input
-              type="text"
-              value={supabaseUrl}
-              onChange={(e) => setSupabaseUrl(e.target.value)}
-              placeholder="https://xyz.supabase.co"
-              className="w-full rounded-xl bg-zinc-950 border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1.5">
-              Supabase Anon / Service Key
-            </label>
-            <input
-              type="password"
-              value={supabaseKey}
-              onChange={(e) => setSupabaseKey(e.target.value)}
-              placeholder="eyJhbGciOi..."
-              className="w-full rounded-xl bg-zinc-950 border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
-            />
-          </div>
-        </div>
-
-        {/* Schema viewer toggle */}
-        <div className="pt-2">
-          <div className="flex items-center justify-between mb-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowSqlSchema(!showSqlSchema)}
-              className="h-8 text-xs text-zinc-300"
-            >
-              <Code2 className="w-3.5 h-3.5 mr-1 text-emerald-400" />
-              <span>{showSqlSchema ? "Hide SQL Schema" : "View Supabase SQL Schema DDL"}</span>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleCopySql}
-              className="h-8 text-xs text-zinc-400 hover:text-white"
-            >
-              {copiedSql ? (
-                <Check className="w-3.5 h-3.5 text-emerald-400 mr-1" />
-              ) : (
-                <Copy className="w-3.5 h-3.5 mr-1" />
-              )}
-              <span>Copy SQL</span>
-            </Button>
-          </div>
-
-          {showSqlSchema && (
-            <div className="p-4 rounded-2xl bg-black/70 border border-white/10 max-h-56 overflow-y-auto font-mono text-[11px] text-zinc-300 leading-relaxed whitespace-pre">
-              {SUPABASE_SCHEMA_SQL}
-            </div>
-          )}
-        </div>
       </div>
 
       {/* 3. AI Providers & Keys */}

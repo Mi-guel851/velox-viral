@@ -14,6 +14,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 import { ALL_PLATFORMS } from "@/lib/platforms/constants";
 import { PlatformIcon } from "@/components/ui/platform-icons";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,8 @@ export const AppHeader: React.FC = () => {
     accounts,
     settings,
   } = useAppStore();
+
+  const { displayName } = useUserProfile();
 
   const getPageTitle = () => {
     switch (activeTab) {
@@ -67,7 +70,7 @@ export const AppHeader: React.FC = () => {
             <span>{getPageTitle()}</span>
           </h2>
           <span className="hidden sm:block text-[11px] text-zinc-400 font-medium">
-            {settings.workspaceName} • High-Leverage Multi-Channel Engine
+            {displayName} • {settings.workspaceName || "ViralFlow"}
           </span>
         </div>
       </div>

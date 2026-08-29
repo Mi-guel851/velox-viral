@@ -1,98 +1,75 @@
 import { NextResponse } from "next/server";
-import {
-  InstagramProvider,
-  TwitterProvider,
-  TikTokProvider,
-  LinkedInProvider,
-  FacebookProvider,
-  ThreadsProvider,
-  YouTubeProvider,
-} from "@/lib/platforms";
-import { Platform } from "@/lib/types";
+import { getAdapter, isSupportedPlatform, getPlatformAvailability } from "@/lib/platforms/adapters";
+import type { Platform } from "@/lib/types";
+import { getCurrentUser } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/env";
 
+/**
+ * Initiates the OAuth flow for a social platform.
+ *
+ * Returns the authorization URL that the client should open in a popup.
+ * If the platform is not configured (missing env vars), returns an error
+ * explaining what credentials are needed.
+ */
 export async function GET(
   request: Request,
   { params }: { params: { platform: string } }
 ) {
   const platform = params.platform as Platform;
   const url = new URL(request.url);
-  const redirectUri = `${url.origin}/api/auth/${platform}/callback`;
-  const state = Math.random().toString(36).substring(2, 15);
 
-  let authUrl = "";
-
-  switch (platform) {
-    case "instagram":
-      authUrl = InstagramProvider.getAuthorizationUrl({
-        clientId: process.env.INSTAGRAM_CLIENT_ID || "demo_ig_client",
-        redirectUri,
-        state,
-      });
-      break;
-    case "twitter":
-      authUrl = TwitterProvider.getAuthorizationUrl({
-        clientId: process.env.TWITTER_CLIENT_ID || "demo_twitter_client",
-        redirectUri,
-        state,
-        codeChallenge: "demo_pkce_challenge_viralflow",
-      });
-      break;
-    case "tiktok":
-      authUrl = TikTokProvider.getAuthorizationUrl({
-        clientKey: process.env.TIKTOK_CLIENT_KEY || "demo_tiktok_key",
-        redirectUri,
-        state,
-      });
-      break;
-    case "linkedin":
-      authUrl = LinkedInProvider.getAuthorizationUrl({
-        clientId: process.env.LINKEDIN_CLIENT_ID || "demo_linkedin_client",
-        redirectUri,
-        state,
-      });
-      break;
-    case "facebook":
-      authUrl = FacebookProvider.getAuthorizationUrl({
-        clientId: process.env.FACEBOOK_CLIENT_ID || "demo_fb_client",
-        redirectUri,
-        state,
-      });
-      break;
-    case "threads":
-      authUrl = ThreadsProvider.getAuthorizationUrl({
-        clientId: process.env.THREADS_CLIENT_ID || "demo_threads_client",
-        redirectUri,
-        state,
-      });
-      break;
-    case "youtube":
-      authUrl = YouTubeProvider.getAuthorizationUrl({
-        clientId: process.env.GOOGLE_CLIENT_ID || "demo_google_client",
-        redirectUri,
-        state,
-      });
-      break;
-    default:
-      return NextResponse.json({ error: "Unsupported platform" }, { status: 400 });
+  if (!isSupportedPlatform(platform)) {
+    return NextResponse.json({ error: "Unsupported platform" }, { status: 400 });
   }
+
+  // Check if this platform is configured
+  const availability = getPlatformAvailability(platform);
+  if (!availability.configured) {
+    return NextResponse.json(
+      {
+        error: `${platform} is not configured on this deployment.`,
+        envKeys: availability.envKeys,
+        message: `Add ${availability.envKeys.join(" and ")} to your environment variables to enable ${platform} connections.`,
+      },
+      { status: 400 }
+    );
+  }
+
+  // Check if user is authenticated
+  if (isSupabaseConfigured()) {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: "You must be signed in to connect a social account." },
+        { status: 401 }
+      );
+    }
+  }
+
+  const adapter = getAdapter(platform);
+  if (!adapter) {
+    return NextResponse.json(
+      { error: `Could not initialize ${platform} adapter.` },
+      { status: 500 }
+    );
+  }
+
+  // Build the redirect URI — the callback handler at /api/auth/callback
+  const redirectUri = `${url.origin}/api/auth/callback`;
+  const state = `${platform}_${Math.random().toString(36).substring(2, 15)}`;
+
+  const authResult = adapter.buildAuthorizationUrl({
+    clientId: availability.envKeys[0] ? (process.env[availability.envKeys[0]] || "") : "",
+    redirectUri,
+    state,
+  });
 
   return NextResponse.json({
     platform,
-    authUrl,
+    authUrl: authResult.url,
+    codeVerifier: authResult.codeVerifier,
     state,
-    scopes:
-      platform === "instagram"
-        ? InstagramProvider.REQUIRED_SCOPES
-        : platform === "twitter"
-        ? TwitterProvider.REQUIRED_SCOPES
-        : platform === "tiktok"
-        ? TikTokProvider.REQUIRED_SCOPES
-        : platform === "linkedin"
-        ? LinkedInProvider.REQUIRED_SCOPES
-        : platform === "facebook"
-        ? FacebookProvider.REQUIRED_SCOPES
-        : platform === "threads"
-        ? ThreadsProvider.REQUIRED_SCOPES
-        : YouTubeProvider.REQUIRED_SCOPES,
+    scopes: [...adapter.requiredScopes],
+    capabilities: availability.capabilities,
   });
 }
