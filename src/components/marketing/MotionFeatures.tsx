@@ -2,22 +2,67 @@
 
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
+import {
+  PenTool,
+  Eye,
+  Repeat2,
+  CalendarClock,
+  BarChart3,
+  Bell,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface Feature {
-  icon: LucideIcon;
-  title: string;
-  body: string;
-  color: string;
-}
+const FEATURES = [
+  {
+    icon: PenTool,
+    title: "One composer, seven channels",
+    body:
+      "Write a master draft and override any platform individually. Character limits, hashtag caps and media rules are validated per platform before anything is sent.",
+    color: "amber",
+  },
+  {
+    icon: Eye,
+    title: "Pixel-accurate previews",
+    body:
+      "See exactly how a post renders on each network — phone, tablet and desktop, light and dark — before it goes out.",
+    color: "zinc",
+  },
+  {
+    icon: Repeat2,
+    title: "1-to-7 repurposing",
+    body:
+      "Paste an article, transcript or set of notes. Get a native format for every channel: a thread, a carousel caption, a short-form script, a discussion prompt.",
+    color: "amber",
+  },
+  {
+    icon: CalendarClock,
+    title: "Server-side scheduling",
+    body:
+      "Queue a post and close your laptop. Publishing happens on our servers with retries and per-platform status.",
+    color: "zinc",
+  },
+  {
+    icon: BarChart3,
+    title: "Real analytics, not estimates",
+    body:
+      "Impressions, reach, saves, clicks and follower growth pulled straight from each platform's API. Never estimated.",
+    color: "amber",
+  },
+  {
+    icon: Bell,
+    title: "Backend-confirmed events",
+    body:
+      "Notifications fire on real events: published, partially published, failed, token expiring. A success means the platform confirmed it.",
+    color: "zinc",
+  },
+];
 
-export const MotionFeatures: React.FC<{ features: Feature[] }> = ({ features }) => {
+export const MotionFeatures: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
     <div className="grid md:grid-cols-2 gap-px bg-white/[0.04] rounded-2xl overflow-hidden">
-      {features.map((feature, index) => (
+      {FEATURES.map((feature, index) => (
         <motion.div
           key={feature.title}
           initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}

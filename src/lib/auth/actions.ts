@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured, appUrl } from "@/lib/env";
+import { isSupabaseConfigured } from "@/lib/env";
 import {
   signUpSchema,
   signInSchema,
@@ -263,24 +263,13 @@ export async function verifySecurityPhraseAction(formData: FormData): Promise<Au
 
   const userId = profile.id;
 
-  // Security phrase matches. Now we need to create a password reset flow.
-  // Since we can't use Supabase's built-in email recovery, we'll create a
-  // temporary token that allows the user to reset their password.
-  // We'll store a hash of the reset token in the profile and redirect to a
-  // reset page with the token.
-
+  // Security phrase matches. Create a temporary reset token and redirect.
   const crypto = await import("crypto");
   const resetToken = crypto.randomBytes(32).toString("hex");
   const resetTokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour
 
-  // Store the reset token hash in the profile.
-  // We'll use the security_phrase column's context — but actually, we need a
-  // dedicated place. Let's store it temporarily in the activity_logs or use
-  // a simpler approach: update the profile with a reset token hash.
-  //
-  // Since we don't have a dedicated reset_tokens table, we'll use the
-  // activity_logs table to store the reset request.
+  // Store the reset token hash in activity_logs.
   const { error: logError } = await supabase.from("activity_logs").insert({
     user_id: userId,
     action: "password_reset_request",

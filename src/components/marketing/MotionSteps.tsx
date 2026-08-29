@@ -2,15 +2,30 @@
 
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
+import { Link2, Sparkles, Rocket } from "lucide-react";
 
-interface Step {
-  icon: LucideIcon;
-  title: string;
-  body: string;
-}
+const STEPS = [
+  {
+    icon: Link2,
+    title: "Connect your channels",
+    body:
+      "Authorise each network over OAuth. Tokens are encrypted before they touch the database and never exposed to the browser.",
+  },
+  {
+    icon: Sparkles,
+    title: "Compose and adapt",
+    body:
+      "Draft once, then let the AI studio generate hooks, captions and hashtags tuned to the platform you're targeting.",
+  },
+  {
+    icon: Rocket,
+    title: "Publish or queue",
+    body:
+      "Send immediately or schedule it. Track each platform's result independently and retry only what failed.",
+  },
+];
 
-export const MotionSteps: React.FC<{ steps: Step[] }> = ({ steps }) => {
+export const MotionSteps: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -30,7 +45,7 @@ export const MotionSteps: React.FC<{ steps: Step[] }> = ({ steps }) => {
         />
       )}
 
-      {steps.map((step, index) => (
+      {STEPS.map((step, index) => (
         <motion.div
           key={step.title}
           initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}

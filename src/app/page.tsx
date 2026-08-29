@@ -4,17 +4,9 @@ import Link from "next/link";
 import {
   ArrowRight,
   Sparkles,
-  CalendarClock,
-  BarChart3,
-  Repeat2,
-  Eye,
   ShieldCheck,
-  Bell,
   Check,
   Zap,
-  PenTool,
-  Link2,
-  Rocket,
 } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { Reveal } from "@/components/marketing/Reveal";
@@ -40,72 +32,6 @@ export const metadata: Metadata = {
   title: `${BRAND.name} — Write once. Publish everywhere.`,
   description: BRAND.description,
 };
-
-const FEATURES = [
-  {
-    icon: PenTool,
-    title: "One composer, seven channels",
-    body:
-      "Write a master draft and override any platform individually. Character limits, hashtag caps and media rules are validated per platform before anything is sent.",
-    color: "amber",
-  },
-  {
-    icon: Eye,
-    title: "Pixel-accurate previews",
-    body:
-      "See exactly how a post renders on each network — phone, tablet and desktop, light and dark — before it goes out.",
-    color: "zinc",
-  },
-  {
-    icon: Repeat2,
-    title: "1-to-7 repurposing",
-    body:
-      "Paste an article, transcript or set of notes. Get a native format for every channel: a thread, a carousel caption, a short-form script, a discussion prompt.",
-    color: "amber",
-  },
-  {
-    icon: CalendarClock,
-    title: "Server-side scheduling",
-    body:
-      "Queue a post and close your laptop. Publishing happens on our servers with retries and per-platform status.",
-    color: "zinc",
-  },
-  {
-    icon: BarChart3,
-    title: "Real analytics, not estimates",
-    body:
-      "Impressions, reach, saves, clicks and follower growth pulled straight from each platform's API. Never estimated.",
-    color: "amber",
-  },
-  {
-    icon: Bell,
-    title: "Backend-confirmed events",
-    body:
-      "Notifications fire on real events: published, partially published, failed, token expiring. A success means the platform confirmed it.",
-    color: "zinc",
-  },
-];
-
-const STEPS = [
-  {
-    icon: Link2,
-    title: "Connect your channels",
-    body:
-      "Authorise each network over OAuth. Tokens are encrypted before they touch the database and never exposed to the browser.",
-  },
-  {
-    icon: Sparkles,
-    title: "Compose and adapt",
-    body:
-      "Draft once, then let the AI studio generate hooks, captions and hashtags tuned to the platform you're targeting.",
-  },
-  {
-    icon: Rocket,
-    title: "Publish or queue",
-    body:
-      "Send immediately or schedule it. Track each platform's result independently and retry only what failed.",
-  },
-];
 
 const FAQS = [
   {
@@ -261,7 +187,7 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <MotionFeatures features={FEATURES} />
+          <MotionFeatures />
         </div>
       </section>
 
@@ -281,7 +207,7 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <MotionSteps steps={STEPS} />
+          <MotionSteps />
         </div>
       </section>
 
