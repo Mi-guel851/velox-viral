@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 import { getCurrentUser } from "@/lib/supabase/server";
@@ -8,13 +8,33 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+function ResetFallback() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <div className="space-y-2">
+        <div className="w-10 h-10 rounded-xl bg-white/[0.06]" />
+        <div className="h-7 w-52 rounded-lg bg-white/[0.06]" />
+        <div className="h-4 w-64 rounded bg-white/[0.04]" />
+      </div>
+      <div className="space-y-4">
+        <div className="h-[70px] rounded-xl bg-white/[0.04]" />
+        <div className="h-[70px] rounded-xl bg-white/[0.04]" />
+        <div className="h-12 rounded-xl bg-white/[0.06]" />
+      </div>
+    </div>
+  );
+}
+
 /**
- * The recovery link lands on /auth/confirm first, which exchanges the token for
- * a session and redirects here. Verifying that session server-side means an
- * expired or forged link renders the "invalid link" state instead of a password
- * form that would fail on submit.
+ * The security-phrase recovery flow lands here with ?token=... in the URL.
+ * The legacy email recovery flow lands here after /auth/confirm creates a session.
+ * Wrapping in Suspense is required because the form uses useSearchParams().
  */
 export default async function ResetPasswordPage() {
   const user = await getCurrentUser();
-  return <ResetPasswordForm hasRecoverySession={Boolean(user)} />;
+  return (
+    <Suspense fallback={<ResetFallback />}>
+      <ResetPasswordForm hasRecoverySession={Boolean(user)} />
+    </Suspense>
+  );
 }

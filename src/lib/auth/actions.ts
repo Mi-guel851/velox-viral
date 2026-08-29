@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured, appUrl } from "@/lib/env";
 import {

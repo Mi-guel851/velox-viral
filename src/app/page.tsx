@@ -26,7 +26,6 @@ import { MotionPlatforms } from "@/components/marketing/MotionPlatforms";
 import { MotionPricing } from "@/components/marketing/MotionPricing";
 import { MotionSteps } from "@/components/marketing/MotionSteps";
 import { Button } from "@/components/ui/button";
-import { PLATFORMS, ALL_PLATFORMS } from "@/lib/platforms/constants";
 import {
   PLANS,
   PLAN_ORDER,
