@@ -20,7 +20,11 @@ import { Logo } from "@/components/brand/Logo";
 import { Reveal } from "@/components/marketing/Reveal";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 import { FlywheelVisual } from "@/components/marketing/FlywheelVisual";
-import { PlatformIcon } from "@/components/ui/platform-icons";
+import { FloatingOrbs } from "@/components/marketing/FloatingOrbs";
+import { MotionFeatures } from "@/components/marketing/MotionFeatures";
+import { MotionPlatforms } from "@/components/marketing/MotionPlatforms";
+import { MotionPricing } from "@/components/marketing/MotionPricing";
+import { MotionSteps } from "@/components/marketing/MotionSteps";
 import { Button } from "@/components/ui/button";
 import { PLATFORMS, ALL_PLATFORMS } from "@/lib/platforms/constants";
 import {
@@ -32,7 +36,6 @@ import {
 } from "@/lib/plans";
 import { serverEnv } from "@/lib/env.server";
 import { BRAND } from "@/lib/brand";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: `${BRAND.name} — Write once. Publish everywhere.`,
@@ -86,21 +89,18 @@ const FEATURES = [
 
 const STEPS = [
   {
-    number: "01",
     icon: Link2,
     title: "Connect your channels",
     body:
       "Authorise each network over OAuth. Tokens are encrypted before they touch the database and never exposed to the browser.",
   },
   {
-    number: "02",
     icon: Sparkles,
     title: "Compose and adapt",
     body:
       "Draft once, then let the AI studio generate hooks, captions and hashtags tuned to the platform you're targeting.",
   },
   {
-    number: "03",
     icon: Rocket,
     title: "Publish or queue",
     body:
@@ -138,6 +138,9 @@ const FAQS = [
 export default function LandingPage() {
   const currency = serverEnv.PAYSTACK_CURRENCY ?? DEFAULT_BILLING_CURRENCY;
 
+  // Prepare plan data for the client-side MotionPricing component.
+  const planData = PLAN_ORDER.map((planId) => PLANS[planId]);
+
   return (
     <div className="min-h-screen">
       <MarketingNav />
@@ -146,11 +149,7 @@ export default function LandingPage() {
       {/* Hero                                                                */}
       {/* ------------------------------------------------------------------ */}
       <section className="relative pt-36 sm:pt-44 pb-20 sm:pb-28 px-4 sm:px-6 overflow-hidden">
-        {/* Subtle radial glow — warm, not neon */}
-        <div
-          aria-hidden
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-amber-500/[0.06] via-transparent to-transparent blur-3xl pointer-events-none"
-        />
+        <FloatingOrbs />
 
         <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="space-y-8">
@@ -225,7 +224,7 @@ export default function LandingPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* Platforms — horizontal scroll on mobile, grid on desktop             */}
+      {/* Platforms                                                           */}
       {/* ------------------------------------------------------------------ */}
       <section id="platforms" className="py-16 px-4 sm:px-6 scroll-mt-24">
         <div className="max-w-6xl mx-auto">
@@ -236,33 +235,13 @@ export default function LandingPage() {
           </Reveal>
 
           <Reveal delay={0.08}>
-            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 sm:pb-0 sm:grid sm:grid-cols-4 lg:grid-cols-7 sm:overflow-visible">
-              {ALL_PLATFORMS.map((platform) => {
-                const config = PLATFORMS[platform];
-                return (
-                  <div
-                    key={platform}
-                    className="surface-card rounded-xl px-4 py-3.5 flex items-center gap-3 min-w-[140px] sm:min-w-0 sm:flex-col sm:items-center sm:gap-2 sm:text-center sm:px-3"
-                  >
-                    <PlatformIcon platform={platform} className="w-5 h-5 text-zinc-300 shrink-0" />
-                    <div className="sm:space-y-0.5">
-                      <span className="text-[11px] font-semibold text-zinc-200 leading-tight block">
-                        {config.name}
-                      </span>
-                      <span className="text-[9px] font-mono text-zinc-600 block">
-                        {config.maxCharacters.toLocaleString("en-US")} chars
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <MotionPlatforms />
           </Reveal>
         </div>
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* Features — two-column editorial layout, not a card grid             */}
+      {/* Features                                                            */}
       {/* ------------------------------------------------------------------ */}
       <section id="features" className="py-24 px-4 sm:px-6 scroll-mt-24">
         <div className="max-w-6xl mx-auto">
@@ -283,37 +262,12 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <div className="grid md:grid-cols-2 gap-px bg-white/[0.04] rounded-2xl overflow-hidden">
-            {FEATURES.map((feature, index) => (
-              <Reveal key={feature.title} delay={index * 0.05}>
-                <div className="bg-[#0b0d13] p-7 sm:p-8 space-y-4 group hover:bg-white/[0.015] transition-colors duration-300">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={cn(
-                        "w-9 h-9 rounded-lg flex items-center justify-center",
-                        feature.color === "amber"
-                          ? "bg-amber-500/10 text-amber-400"
-                          : "bg-white/[0.04] text-zinc-400"
-                      )}
-                    >
-                      <feature.icon className="w-4.5 h-4.5" />
-                    </div>
-                    <h3 className="font-display text-[15px] font-semibold text-white">
-                      {feature.title}
-                    </h3>
-                  </div>
-                  <p className="text-[13px] text-zinc-400 leading-relaxed">
-                    {feature.body}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <MotionFeatures features={FEATURES} />
         </div>
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* How it works — numbered steps with connecting line                  */}
+      {/* How it works                                                        */}
       {/* ------------------------------------------------------------------ */}
       <section id="how-it-works" className="py-24 px-4 sm:px-6 scroll-mt-24">
         <div className="max-w-5xl mx-auto">
@@ -328,33 +282,7 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <div className="relative grid md:grid-cols-3 gap-8 md:gap-6">
-            {/* Connecting line — desktop only */}
-            <div className="hidden md:block absolute top-[52px] left-[16.7%] right-[16.7%] h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-
-            {STEPS.map((step, index) => (
-              <Reveal key={step.title} delay={index * 0.1}>
-                <div className="relative text-center space-y-5">
-                  <div className="relative inline-flex">
-                    <div className="w-[52px] h-[52px] rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
-                      <step.icon className="w-5 h-5 text-amber-400/80" />
-                    </div>
-                    <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-amber-500 text-zinc-950 text-[10px] font-bold flex items-center justify-center">
-                      {index + 1}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-display text-[15px] font-semibold text-white mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-[13px] text-zinc-400 leading-relaxed max-w-xs mx-auto">
-                      {step.body}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <MotionSteps steps={STEPS} />
         </div>
       </section>
 
@@ -377,71 +305,12 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <div className="grid md:grid-cols-3 gap-4 items-start">
-            {PLAN_ORDER.map((planId, index) => {
-              const plan = PLANS[planId];
-              const isPaid = planAmount(plan, currency) > 0;
-              return (
-                <Reveal key={plan.id} delay={index * 0.08}>
-                  <div
-                    className={cn(
-                      "relative rounded-2xl p-6 h-full flex flex-col space-y-5 transition-all duration-300",
-                      plan.highlighted
-                        ? "bg-amber-500/[0.06] border border-amber-500/20 shadow-lg shadow-amber-500/5"
-                        : "surface-card"
-                    )}
-                  >
-                    {plan.highlighted && (
-                      <span className="absolute -top-2.5 left-6 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-zinc-950">
-                        POPULAR
-                      </span>
-                    )}
-
-                    <div className="space-y-1.5">
-                      <h3 className="font-display text-lg font-bold text-white">{plan.name}</h3>
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="font-display text-3xl font-bold text-white tracking-tight">
-                          {formatPlanPrice(plan, currency)}
-                        </span>
-                        {isPaid && (
-                          <span className="text-xs text-zinc-500 font-medium">/month</span>
-                        )}
-                      </div>
-                      <p className="text-xs text-zinc-500 leading-relaxed">
-                        {plan.tagline}
-                      </p>
-                    </div>
-
-                    <ul className="space-y-2.5 flex-1">
-                      {plan.features.map((feature) => (
-                        <li key={feature} className="flex items-start gap-2">
-                          <Check className="w-3.5 h-3.5 text-amber-500/70 mt-0.5 shrink-0" />
-                          <span className="text-xs text-zinc-300 leading-relaxed">
-                            {feature}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <Button
-                      asChild
-                      variant={plan.highlighted ? "gradient" : "apple"}
-                      className="w-full rounded-xl h-11 text-sm font-semibold"
-                    >
-                      <Link href="/signup">
-                        {isPaid ? `Choose ${plan.name}` : "Get started free"}
-                      </Link>
-                    </Button>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
+          <MotionPricing plans={planData} currency={currency} />
         </div>
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* FAQ — native <details> so this section needs no JavaScript          */}
+      {/* FAQ                                                                 */}
       {/* ------------------------------------------------------------------ */}
       <section id="faq" className="py-24 px-4 sm:px-6 scroll-mt-24">
         <div className="max-w-2xl mx-auto">
@@ -487,7 +356,6 @@ export default function LandingPage() {
       <section className="py-24 px-4 sm:px-6">
         <Reveal>
           <div className="relative max-w-4xl mx-auto rounded-2xl border border-white/[0.06] p-8 sm:p-14 text-center overflow-hidden">
-            {/* Warm ambient glow */}
             <div
               aria-hidden
               className="absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[350px] bg-gradient-to-b from-amber-500/[0.08] via-transparent to-transparent blur-3xl pointer-events-none"
