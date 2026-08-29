@@ -78,7 +78,7 @@ export const AppHeader: React.FC = () => {
         <div
           onClick={() => setActiveTab("accounts")}
           className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/[0.03] hover:bg-white/10 border border-white/10 cursor-pointer transition-all"
-          title="7 Connected Social Channels"
+          title={`${accounts.length} Connected Social Channel${accounts.length !== 1 ? "s" : ""}`}
         >
           <div className="flex items-center -space-x-1">
             {ALL_PLATFORMS.slice(0, 5).map((p) => (

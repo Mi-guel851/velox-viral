@@ -72,7 +72,7 @@ export const ConnectedAccounts: React.FC = () => {
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               OAuth 2.0 & Token Health Engine
             </span>
-            <Badge variant="success">7 Platforms Ready</Badge>
+            <Badge variant="success">{accounts.length} Channel{accounts.length !== 1 ? "s" : ""} Connected</Badge>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Connected Social Accounts
@@ -93,6 +93,27 @@ export const ConnectedAccounts: React.FC = () => {
       </div>
 
       {/* Connected Channels Grid */}
+      {accounts.length === 0 ? (
+        <div className="glass-card rounded-3xl p-12 border border-white/10 text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mx-auto">
+            <Link2 className="w-8 h-8" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white mb-1">No channels connected yet</h3>
+            <p className="text-sm text-zinc-400 max-w-md mx-auto">
+              Connect your first social media account to start publishing cross-platform content.
+            </p>
+          </div>
+          <Button
+            onClick={() => setShowConnectModal(true)}
+            variant="gradient"
+            className="h-11 px-6 rounded-2xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/25"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Connect Your First Channel</span>
+          </Button>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {accounts.map((acc) => {
           const pConf = PLATFORMS[acc.platform];
@@ -216,6 +237,7 @@ export const ConnectedAccounts: React.FC = () => {
           );
         })}
       </div>
+      )}
 
       {/* CONNECT CHANNEL MODAL */}
       {showConnectModal && (
@@ -275,7 +297,7 @@ export const ConnectedAccounts: React.FC = () => {
                   type="text"
                   value={customHandle}
                   onChange={(e) => setCustomHandle(e.target.value)}
-                  placeholder={`E.g. alexcreator_${selectedPlatform}`}
+                  placeholder={`e.g. your_${selectedPlatform}_handle`}
                   className="w-full rounded-xl bg-zinc-950 border border-white/10 p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
                 />
               </div>

@@ -70,12 +70,14 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                AI Social Engine • Multichannel Active
+                AI Social Engine
               </span>
-              <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                All 7 Channels Synced
-              </span>
+              {accounts.length > 0 && (
+                <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  {accounts.filter((a) => a.status === "connected").length} Channel{accounts.filter((a) => a.status === "connected").length !== 1 ? "s" : ""} Connected
+                </span>
+              )}
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Create once. Go viral everywhere.
@@ -116,8 +118,8 @@ export const DashboardView: React.FC = () => {
           <div className="text-2xl font-bold text-white tracking-tight">
             {formatNumber(analytics.totalFollowers)}
           </div>
-          <span className="text-[11px] font-semibold text-emerald-400 block">
-            +{analytics.followerGrowthPercent}% organic growth
+          <span className="text-[11px] font-semibold text-zinc-500 block">
+            {analytics.totalFollowers > 0 ? `+${analytics.followerGrowthPercent}% growth` : "Connect channels to track"}
           </span>
         </div>
 
@@ -129,8 +131,8 @@ export const DashboardView: React.FC = () => {
           <div className="text-2xl font-bold text-white tracking-tight">
             {formatNumber(analytics.totalImpressions)}
           </div>
-          <span className="text-[11px] font-semibold text-emerald-400 block">
-            +24.1% MoM velocity
+          <span className="text-[11px] font-semibold text-zinc-500 block">
+            {analytics.totalImpressions > 0 ? "Tracked from platforms" : "Connect channels to track"}
           </span>
         </div>
 
@@ -142,8 +144,8 @@ export const DashboardView: React.FC = () => {
           <div className="text-2xl font-bold text-white tracking-tight">
             {scheduledPosts.length} Posts Ready
           </div>
-          <span className="text-[11px] font-semibold text-cyan-400 block">
-            Next: Tomorrow 2:30 PM
+          <span className="text-[11px] font-semibold text-zinc-500 block">
+            {scheduledPosts.length > 0 ? "Posts queued" : "No posts scheduled"}
           </span>
         </div>
 
@@ -155,8 +157,8 @@ export const DashboardView: React.FC = () => {
           <div className="text-2xl font-bold text-white tracking-tight">
             {analytics.avgEngagementRate}%
           </div>
-          <span className="text-[11px] font-semibold text-amber-400 block">
-            ⚡ Top 2% creator tier
+          <span className="text-[11px] font-semibold text-zinc-500 block">
+            {analytics.avgEngagementRate > 0 ? `Avg across ${accounts.length} channel${accounts.length !== 1 ? "s" : ""}` : "Connect channels to track"}
           </span>
         </div>
       </div>
@@ -294,33 +296,47 @@ export const DashboardView: React.FC = () => {
             </div>
 
             <div className="space-y-2.5">
-              {accounts.map((acc) => (
-                <div
-                  key={acc.id}
-                  className="p-3 rounded-2xl bg-zinc-950/60 border border-white/5 flex items-center justify-between hover:border-white/10 transition-colors"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <PlatformIcon platform={acc.platform} className="w-4 h-4" />
-                    <div>
+              {accounts.length === 0 ? (
+                <div className="p-6 text-center rounded-2xl bg-black/30 border border-white/5 space-y-2">
+                  <p className="text-xs text-zinc-400">No channels connected yet.</p>
+                  <Button
+                    variant="gradient"
+                    size="sm"
+                    onClick={() => setActiveTab("accounts")}
+                    className="rounded-xl text-xs"
+                  >
+                    Connect First Channel
+                  </Button>
+                </div>
+              ) : (
+                accounts.map((acc) => (
+                  <div
+                    key={acc.id}
+                    className="p-3 rounded-2xl bg-zinc-950/60 border border-white/5 flex items-center justify-between hover:border-white/10 transition-colors"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <PlatformIcon platform={acc.platform} className="w-4 h-4" />
+                      <div>
+                        <span className="text-xs font-bold text-white block">
+                          {acc.displayName}
+                        </span>
+                        <span className="text-[10px] text-zinc-400 font-mono">
+                          @{acc.username}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
                       <span className="text-xs font-bold text-white block">
-                        {acc.displayName}
+                        {formatNumber(acc.followerCount)}
                       </span>
-                      <span className="text-[10px] text-zinc-400 font-mono">
-                        @{acc.username}
+                      <span className="text-[10px] text-emerald-400 font-semibold">
+                        {acc.metrics.engagementRate}% eng.
                       </span>
                     </div>
                   </div>
-
-                  <div className="text-right">
-                    <span className="text-xs font-bold text-white block">
-                      {formatNumber(acc.followerCount)}
-                    </span>
-                    <span className="text-[10px] text-emerald-400 font-semibold">
-                      {acc.metrics.engagementRate}% eng.
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 

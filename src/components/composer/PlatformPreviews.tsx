@@ -61,8 +61,8 @@ export const PlatformPreviews: React.FC<PlatformPreviewsProps> = ({
   const fallbackAvatar =
     account?.avatar ||
     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
-  const displayName = account?.displayName || "Alex Rivera";
-  const username = account?.username || "alexcreator_ai";
+  const displayName = account?.displayName || "Your Account";
+  const username = account?.username || "your_handle";
 
   const displayContent = content || "Start drafting your content to see live platform previews...";
   const previewMedia =
@@ -343,7 +343,7 @@ export const PlatformPreviews: React.FC<PlatformPreviewsProps> = ({
                   </p>
                   <div className="flex items-center gap-2 text-[11px] text-white/80">
                     <Music2 className="w-3.5 h-3.5" />
-                    <span className="truncate">Original Sound - Alex Rivera HQ • Trending Beat</span>
+                    <span className="truncate">Original Sound - {displayName} • Trending Beat</span>
                   </div>
                 </div>
               </div>

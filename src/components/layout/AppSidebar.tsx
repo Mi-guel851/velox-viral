@@ -38,7 +38,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "calendar", label: "Schedule & Calendar", icon: Calendar },
   { id: "library", label: "Viral Hook Bank", icon: BookOpen, badge: "50+" },
   { id: "analytics", label: "Analytics", icon: TrendingUp },
-  { id: "accounts", label: "Connected Channels", icon: Link2, badge: "7" },
+  { id: "accounts", label: "Connected Channels", icon: Link2 },
   { id: "settings", label: "Settings", icon: Settings },
 ];
 
@@ -49,7 +49,10 @@ export const AppSidebar: React.FC = () => {
     sidebarCollapsed,
     setSidebarCollapsed,
     settings,
+    accounts,
   } = useAppStore();
+
+  const connectedCount = accounts.filter((a) => a.status === "connected").length;
 
   return (
     <aside
@@ -183,7 +186,7 @@ export const AppSidebar: React.FC = () => {
                 {settings.workspaceName}
               </span>
               <span className="text-[10px] text-zinc-400 block truncate">
-                Pro Plan • 7 Channels
+                {connectedCount > 0 ? `${connectedCount} Channel${connectedCount !== 1 ? "s" : ""} Connected` : "No channels connected"}
               </span>
             </div>
           )}

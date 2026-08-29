@@ -52,7 +52,7 @@ export const SignupForm: React.FC<{ configured: boolean }> = ({ configured }) =>
           name="fullName"
           type="text"
           autoComplete="name"
-          placeholder="Alex Rivera"
+          placeholder="Your full name"
           required
           disabled={isPending || !configured}
           error={result?.fieldErrors?.fullName}

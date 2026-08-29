@@ -65,7 +65,7 @@ export const AnalyticsView: React.FC = () => {
               <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
               Real-Time Cross-Platform Intelligence
             </span>
-            <Badge variant="success">All Systems Synced</Badge>
+            <Badge variant={analytics.totalFollowers > 0 ? "success" : "default"}>{analytics.totalFollowers > 0 ? "Data Synced" : "No Data Yet"}</Badge>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Performance Analytics
@@ -124,8 +124,11 @@ export const AnalyticsView: React.FC = () => {
             {formatNumber(analytics.totalImpressions)}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
-            <ArrowUpRight className="w-4 h-4" />
-            <span>+24.1% MoM velocity</span>
+            {analytics.totalImpressions > 0 ? (
+              <><ArrowUpRight className="w-4 h-4" /><span>+{analytics.followerGrowthPercent}% MoM</span></>
+            ) : (
+              <span className="text-zinc-500">Connect channels to track</span>
+            )}
           </div>
         </div>
 
@@ -140,9 +143,12 @@ export const AnalyticsView: React.FC = () => {
           <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             {analytics.avgEngagementRate}%
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-cyan-400 font-semibold">
-            <Zap className="w-3.5 h-3.5" />
-            <span>Top 2% creator benchmark</span>
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+            {analytics.avgEngagementRate > 0 ? (
+              <><Zap className="w-3.5 h-3.5" /><span>{analytics.avgEngagementRate}% avg</span></>
+            ) : (
+              <span>Connect channels to track</span>
+            )}
           </div>
         </div>
 
@@ -157,8 +163,12 @@ export const AnalyticsView: React.FC = () => {
           <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             {analytics.viralPostsCount} Posts
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-amber-400 font-semibold">
-            <span>⚡ 4.8x Average Multiplier</span>
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+            {analytics.viralPostsCount > 0 ? (
+              <span>⚡ From {analytics.viralPostsCount} published post{analytics.viralPostsCount !== 1 ? "s" : ""}</span>
+            ) : (
+              <span>No published posts yet</span>
+            )}
           </div>
         </div>
       </div>
@@ -231,7 +241,7 @@ export const AnalyticsView: React.FC = () => {
         <div className="lg:col-span-5 glass-card rounded-3xl p-5 sm:p-6 border border-white/10 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-white">Channel Audience Breakdown</h3>
-            <span className="text-xs text-zinc-400">7 Active Accounts</span>
+            <span className="text-xs text-zinc-400">{platformStats.filter((s) => s.followers > 0).length} Active Account{platformStats.filter((s) => s.followers > 0).length !== 1 ? "s" : ""}</span>
           </div>
 
           <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
@@ -275,12 +285,16 @@ export const AnalyticsView: React.FC = () => {
                 Best Posting Times Heatmap
               </h3>
               <p className="text-xs text-zinc-400">
-                Audience activity index analyzed across your 401K followers
+                {analytics.totalFollowers > 0
+                  ? `Audience activity index analyzed across ${formatNumber(analytics.totalFollowers)} followers`
+                  : "Connect channels to see peak posting times"}
               </p>
             </div>
-            <span className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-xl">
-              🔥 Peak: Tue & Wed 3-5 PM
-            </span>
+            {analytics.bestTimes.length > 0 && (
+              <span className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-xl">
+                🔥 Peak times identified
+              </span>
+            )}
           </div>
 
           {/* 7-Day Peak Visual Grid */}
