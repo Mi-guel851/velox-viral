@@ -51,7 +51,7 @@ export const AppHeader: React.FC = () => {
       case "settings":
         return "Workspace Settings";
       default:
-        return "ViralFlow";
+        return "Velox Viral";
     }
   };
 
