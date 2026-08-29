@@ -41,10 +41,7 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
 
       {!configured && (
         <AuthAlert variant="info">
-          This deployment has no database connected yet. Add{" "}
-          <code className="font-mono text-[11px]">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
-          <code className="font-mono text-[11px]">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to
-          enable accounts.
+          Database is not configured yet. Contact your administrator to enable account features.
         </AuthAlert>
       )}
 

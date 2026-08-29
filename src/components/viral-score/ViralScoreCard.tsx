@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -22,7 +22,7 @@ import confetti from "canvas-confetti";
 interface ViralScoreCardProps {
   score?: ViralScoreBreakdown;
   platform?: Platform;
-  onApplyOptimized?: () => void;
+  onApplyOptimized?: () => Promise<void> | void;
   onReanalyze?: () => void;
   compact?: boolean;
 }
@@ -74,7 +74,9 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
     }
   };
 
-  const handleBoostClick = () => {
+  const [isBoosting, setIsBoosting] = useState(false);
+
+  const handleBoostClick = async () => {
     confetti({
       particleCount: 50,
       spread: 60,
@@ -82,7 +84,12 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
       colors: ["#6366f1", "#ec4899", "#06b6d4", "#10b981"],
     });
     if (onApplyOptimized) {
-      onApplyOptimized();
+      setIsBoosting(true);
+      try {
+        await onApplyOptimized();
+      } finally {
+        setIsBoosting(false);
+      }
     }
   };
 
@@ -260,10 +267,15 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
           <Button
             onClick={handleBoostClick}
             variant="gradient"
+            disabled={isBoosting}
             className="w-full h-11 text-xs sm:text-sm font-semibold rounded-2xl flex items-center justify-center gap-2 group"
           >
-            <Zap className="w-4 h-4 fill-white group-hover:scale-110 transition-transform" />
-            <span>⚡ 1-Click Auto-Fix & Boost (Rewrites to 95+ Score)</span>
+            {isBoosting ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Zap className="w-4 h-4 fill-white group-hover:scale-110 transition-transform" />
+            )}
+            <span>{isBoosting ? "AI is rewriting your post..." : "\u26A1 1-Click Auto-Fix & Boost (Rewrites to 95+ Score)"}</span>
           </Button>
         </div>
       )}

@@ -39,8 +39,7 @@ export const SignupForm: React.FC<{ configured: boolean }> = ({ configured }) =>
 
       {!configured && (
         <AuthAlert variant="info">
-          This deployment has no database connected yet. Add your Supabase
-          credentials to enable account creation.
+          Database is not configured yet. Contact your administrator to enable account features.
         </AuthAlert>
       )}
 

@@ -72,7 +72,7 @@ interface AppState {
   setComposerSchedule: (date: string | null) => void;
   setActiveOverridePlatform: (platform?: Platform) => void;
   analyzeComposerViralScore: () => void;
-  applyOptimizedCaption: () => void;
+  applyOptimizedCaption: () => Promise<void>;
   resetComposer: () => void;
   loadPostIntoComposer: (post: Post) => void;
 
@@ -300,15 +300,36 @@ export const useAppStore = create<AppState>()(
         set((state) => ({ composer: { ...state.composer, viralScore } }));
       },
 
-      applyOptimizedCaption: () => {
+      applyOptimizedCaption: async () => {
         const composer = get().composer;
-        if (!composer.viralScore?.improvedVersion) return;
+        const currentText = composer.activeOverridePlatform
+          ? composer.platformContent[composer.activeOverridePlatform] || composer.defaultContent
+          : composer.defaultContent;
 
-        const improved = composer.viralScore.improvedVersion;
-        if (composer.activeOverridePlatform) {
-          get().setPlatformOverrideContent(composer.activeOverridePlatform, improved);
-        } else {
-          get().setComposerContent(improved);
+        if (!currentText.trim()) return;
+
+        const { AIService } = await import("@/lib/ai/ai-service");
+        try {
+          const improved = await AIService.improveContent(
+            currentText,
+            "boost_viral",
+            composer.activeOverridePlatform || composer.targetPlatforms[0] || "twitter"
+          );
+          if (composer.activeOverridePlatform) {
+            get().setPlatformOverrideContent(composer.activeOverridePlatform, improved);
+          } else {
+            get().setComposerContent(improved);
+          }
+        } catch (err) {
+          // Fallback to local ViralAnalyzer version if API fails
+          if (composer.viralScore?.improvedVersion) {
+            const fallback = composer.viralScore.improvedVersion;
+            if (composer.activeOverridePlatform) {
+              get().setPlatformOverrideContent(composer.activeOverridePlatform, fallback);
+            } else {
+              get().setComposerContent(fallback);
+            }
+          }
         }
       },
 

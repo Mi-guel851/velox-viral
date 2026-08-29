@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -25,6 +25,7 @@ import {
   Scissors,
   CheckCircle2,
   Trash2,
+  Upload,
 } from "lucide-react";
 import { Platform } from "@/lib/types";
 import { PLATFORMS, ALL_PLATFORMS, PlatformManager } from "@/lib/platforms";
@@ -76,6 +77,7 @@ export const MultiPlatformComposer: React.FC = () => {
   const [isAIImproving, setIsAIImproving] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [scheduledDate, setScheduledDate] = useState("2026-08-26T15:00");
+  const deviceFileInputRef = useRef<HTMLInputElement>(null);
 
   // Determine current active content depending on whether we are editing master or specific platform
   const currentPlatform = activeTab === "master" ? composer.targetPlatforms[0] || "twitter" : activeTab;
@@ -224,6 +226,32 @@ export const MultiPlatformComposer: React.FC = () => {
     setShowMediaPicker(false);
     toast.success("Media attached!");
   };
+
+  const handleDeviceFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+      toast.error("Please select an image or video file");
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error("File must be under 50MB");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      setComposerMedia([dataUrl], file.type.startsWith("video/") ? "video" : "image");
+      toast.success(`Attached ${file.name}!`);
+    };
+    reader.readAsDataURL(file);
+
+    // Reset input so same file can be re-selected
+    e.target.value = "";
+  }, [setComposerMedia]);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
@@ -428,9 +456,29 @@ export const MultiPlatformComposer: React.FC = () => {
                   animate={{ opacity: 1, height: "auto" }}
                   className="p-3 rounded-2xl bg-zinc-950/90 border border-white/10 space-y-3"
                 >
-                  <span className="text-[11px] font-medium text-zinc-400 block">
-                    Choose from Curated Viral Creator Stock:
-                  </span>
+                  {/* Device Upload Button */}
+                  <button
+                    onClick={() => deviceFileInputRef.current?.click()}
+                    className="w-full p-3 rounded-xl border-2 border-dashed border-indigo-500/30 hover:border-indigo-400/60 bg-indigo-500/5 hover:bg-indigo-500/10 transition-all flex items-center justify-center gap-2 text-indigo-300 hover:text-indigo-200"
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span className="text-xs font-semibold">Upload from your device</span>
+                    <span className="text-[10px] text-zinc-500">(Image or Video, max 50MB)</span>
+                  </button>
+                  <input
+                    ref={deviceFileInputRef}
+                    type="file"
+                    accept="image/*,video/*"
+                    onChange={handleDeviceFileSelect}
+                    className="hidden"
+                  />
+
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-px bg-white/10" />
+                    <span className="text-[10px] text-zinc-500 uppercase tracking-wider">or choose stock</span>
+                    <div className="flex-1 h-px bg-white/10" />
+                  </div>
+
                   <div className="grid grid-cols-4 gap-2">
                     {SAMPLE_MEDIA.map((m) => (
                       <button

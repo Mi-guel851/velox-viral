@@ -4,44 +4,25 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Settings,
-  Database,
-  Cpu,
   Save,
   Download,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { isSupabaseConfigured } from "@/lib/supabase";
-import { ALL_PLATFORMS, PLATFORMS } from "@/lib/platforms/constants";
-import { PlatformIcon } from "@/components/ui/platform-icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 export const SettingsModal: React.FC = () => {
   const { settings, updateSettings, previewTheme, setPreviewTheme } = useAppStore();
 
   const [workspaceName, setWorkspaceName] = useState(settings.workspaceName);
   const [timezone, setTimezone] = useState(settings.timezone);
-  const [aiProvider, setAiProvider] = useState(settings.aiProvider);
-  const [openaiKey, setOpenaiKey] = useState(settings.aiKeys?.openai || "");
-  const [anthropicKey, setAnthropicKey] = useState(settings.aiKeys?.anthropic || "");
-  const [geminiKey, setGeminiKey] = useState(settings.aiKeys?.gemini || "");
-  const [groqKey, setGroqKey] = useState(settings.aiKeys?.groq || "");
-
   const [watermark, setWatermark] = useState(settings.customWatermarkText);
+
   const handleSaveSettings = () => {
     updateSettings({
       workspaceName,
       timezone,
-      aiProvider,
-      aiKeys: {
-        openai: openaiKey,
-        anthropic: anthropicKey,
-        gemini: geminiKey,
-        groq: groqKey,
-      },
-
       customWatermarkText: watermark,
     });
     toast.success("Workspace settings updated successfully!");
@@ -74,7 +55,7 @@ export const SettingsModal: React.FC = () => {
             Workspace Settings
           </h2>
           <p className="text-xs text-zinc-400 mt-0.5">
-            Configure Supabase persistence, AI provider keys, scheduling preferences, and brand tokens.
+            Manage your workspace preferences, branding, and data export.
           </p>
         </div>
 
@@ -134,99 +115,12 @@ export const SettingsModal: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Database Status */}
-      <div className="glass-card rounded-3xl p-5 sm:p-6 border border-white/10 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Database className="w-5 h-5 text-emerald-400" />
-            <h3 className="text-base font-bold text-white">Database Connection</h3>
-          </div>
-          <Badge variant={isSupabaseConfigured() ? "success" : "default"}>
-            {isSupabaseConfigured() ? "Connected" : "Not configured"}
-          </Badge>
-        </div>
-
-        <p className="text-xs text-zinc-400 leading-relaxed">
-          {isSupabaseConfigured()
-            ? "Your Supabase database is connected and syncing data."
-            : "Database credentials are configured by your administrator via environment variables."}
-        </p>
-      </div>
-
-      {/* 3. AI Providers & Keys */}
-      <div className="glass-card rounded-3xl p-5 sm:p-6 border border-white/10 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Cpu className="w-5 h-5 text-indigo-400" />
-            <h3 className="text-base font-bold text-white">AI Provider & Multi-Model Engine</h3>
-          </div>
-          <Badge variant="purple">Multi-Model Router</Badge>
-        </div>
-
-        <div className="space-y-3">
-          <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block">
-            Select Active AI Engine
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {[
-              { id: "builtin", label: "ViralFlow Engine", desc: "Built-in (Zero Config)" },
-              { id: "openai", label: "OpenAI GPT-4o", desc: "OpenAI API" },
-              { id: "anthropic", label: "Claude 3.5", desc: "Anthropic API" },
-              { id: "groq", label: "Groq Llama 3", desc: "Ultra Fast Inference" },
-            ].map((p) => (
-              <button
-                key={p.id}
-                onClick={() => setAiProvider(p.id as any)}
-                className={cn(
-                  "p-3 rounded-2xl border text-left transition-all",
-                  aiProvider === p.id
-                    ? "bg-indigo-600/30 border-indigo-500 text-white shadow-sm ring-1 ring-indigo-400"
-                    : "bg-white/[0.02] border-white/5 text-zinc-400 hover:text-white hover:bg-white/5"
-                )}
-              >
-                <span className="text-xs font-bold block">{p.label}</span>
-                <span className="text-[10px] text-zinc-400">{p.desc}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* API Key Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-          <div>
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
-              OpenAI API Key (Optional)
-            </label>
-            <input
-              type="password"
-              value={openaiKey}
-              onChange={(e) => setOpenaiKey(e.target.value)}
-              placeholder="sk-proj-..."
-              className="w-full rounded-xl bg-zinc-950 border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
-              Anthropic API Key (Optional)
-            </label>
-            <input
-              type="password"
-              value={anthropicKey}
-              onChange={(e) => setAnthropicKey(e.target.value)}
-              placeholder="sk-ant-..."
-              className="w-full rounded-xl bg-zinc-950 border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 4. Backup & Export */}
+      {/* 2. Backup & Export */}
       <div className="glass-card rounded-3xl p-5 sm:p-6 border border-white/10 flex items-center justify-between">
         <div>
           <h4 className="font-bold text-sm text-white">Data Export & Backup</h4>
           <p className="text-xs text-zinc-400">
-            Download an encrypted JSON snapshot of your scheduled posts, templates, and connected channels.
+            Download a JSON snapshot of your scheduled posts, templates, and connected channels.
           </p>
         </div>
 
