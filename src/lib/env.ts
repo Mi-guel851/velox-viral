@@ -70,5 +70,5 @@ export function appUrl(): string {
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  return "http://localhost:3000";
+  return "https://velox-viral-automation.vercel.app/signup";
 }
