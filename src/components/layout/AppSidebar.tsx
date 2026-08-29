@@ -17,11 +17,13 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
+  LogOut,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useUserProfile } from "@/lib/hooks/use-user-profile";
+import { signOutAction } from "@/lib/auth/actions";
 
 interface NavItem {
   id: "dashboard" | "composer" | "studio" | "repurpose" | "calendar" | "library" | "analytics" | "accounts" | "settings";
@@ -168,8 +170,8 @@ export const AppSidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* Bottom Profile / Workspace Pill */}
-      <div className="p-2 border-t border-white/10">
+      {/* Bottom Profile / Workspace Pill + Logout */}
+      <div className="p-2 border-t border-white/10 space-y-2">
         <div
           onClick={() => setActiveTab("settings")}
           className={cn(
@@ -193,6 +195,21 @@ export const AppSidebar: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Logout Button */}
+        <form action={signOutAction}>
+          <button
+            type="submit"
+            className={cn(
+              "w-full flex items-center gap-2.5 p-2 rounded-2xl text-xs font-medium transition-all duration-200",
+              "text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20",
+              sidebarCollapsed ? "justify-center px-0" : ""
+            )}
+          >
+            <LogOut className="w-4 h-4 shrink-0" />
+            {!sidebarCollapsed && <span>Log Out</span>}
+          </button>
+        </form>
       </div>
     </aside>
   );

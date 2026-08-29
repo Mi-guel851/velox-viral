@@ -13,6 +13,7 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
   const searchParams = useSearchParams();
   const nextParam = searchParams.get("next") ?? "";
   const linkError = searchParams.get("error");
+  const sessionExpired = searchParams.get("session_expired") === "1";
 
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<AuthActionResult | null>(null);
@@ -42,6 +43,12 @@ export const LoginForm: React.FC<{ configured: boolean }> = ({ configured }) => 
       {!configured && (
         <AuthAlert variant="info">
           Database is not configured yet. Contact your administrator to enable account features.
+        </AuthAlert>
+      )}
+
+      {sessionExpired && !error && (
+        <AuthAlert variant="info">
+          Your session has expired for security. Please log in again.
         </AuthAlert>
       )}
 

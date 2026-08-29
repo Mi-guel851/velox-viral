@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppBottomNav } from "@/components/layout/AppBottomNav";
 import { useAppStore } from "@/lib/store";
+import { useSessionTimeout } from "@/lib/hooks/use-session-timeout";
 
 import { DashboardView } from "@/components/dashboard/DashboardView";
 import { MultiPlatformComposer } from "@/components/composer/MultiPlatformComposer";
@@ -23,6 +24,9 @@ function getCookie(name: string): string | null {
 
 export default function DashboardPage() {
   const { activeTab, settings, updateSettings } = useAppStore();
+
+  // Automatically sign out after 10 minutes of inactivity
+  useSessionTimeout();
 
   // On first load after onboarding, pick up workspace name from cookie
   useEffect(() => {
