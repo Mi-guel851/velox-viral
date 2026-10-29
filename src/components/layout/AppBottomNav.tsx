@@ -26,7 +26,7 @@ export const AppBottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-3 inset-x-3 z-50 rounded-3xl glass-panel border border-white/15 p-1.5 shadow-2xl flex items-center justify-around">
+    <nav className="md:hidden fixed bottom-3 inset-x-3 z-50 rounded-3xl glass-panel border border-slate-200 p-1.5 shadow-2xl flex items-center justify-around">
       {navItems.map((item) => {
         const isActive = activeTab === item.id;
         return (
@@ -36,14 +36,14 @@ export const AppBottomNav: React.FC = () => {
             className={cn(
               "flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-200 text-[10px] font-medium",
               isActive
-                ? "bg-white/15 text-white font-bold shadow-sm"
-                : "text-zinc-400 hover:text-zinc-200"
+                ? "bg-slate-100/80 text-slate-900 font-bold shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
             )}
           >
             <item.icon
               className={cn(
                 "w-4 h-4 mb-0.5 transition-colors",
-                isActive ? "text-indigo-400" : "text-zinc-400"
+                isActive ? "text-blue-600" : "text-slate-500"
               )}
             />
             <span>{item.label}</span>

@@ -1,358 +1,58 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Sparkles,
-  ShieldCheck,
-  Check,
-  Zap,
-} from "lucide-react";
-import { Logo } from "@/components/brand/Logo";
-import { Reveal } from "@/components/marketing/Reveal";
+import { ArrowRight, ArrowUpRight, BarChart3, CalendarDays, Check, ChevronDown, CircleCheck, Globe2, Layers3, MoreHorizontal, PenLine, Send, Sparkles, WandSparkles, Zap } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
-import { FlywheelVisual } from "@/components/marketing/FlywheelVisual";
-import { FloatingOrbs } from "@/components/marketing/FloatingOrbs";
-import { MotionFeatures } from "@/components/marketing/MotionFeatures";
-import { MotionPlatforms } from "@/components/marketing/MotionPlatforms";
-import { MotionPricing } from "@/components/marketing/MotionPricing";
-import { MotionSteps } from "@/components/marketing/MotionSteps";
-import { Button } from "@/components/ui/button";
-import {
-  PLANS,
-  PLAN_ORDER,
-  formatPlanPrice,
-  planAmount,
-  DEFAULT_BILLING_CURRENCY,
-} from "@/lib/plans";
+import { PLANS, PLAN_ORDER, formatPlanPrice, planAmount, DEFAULT_BILLING_CURRENCY } from "@/lib/plans";
 import { serverEnv } from "@/lib/env.server";
 import { BRAND } from "@/lib/brand";
 
-export const metadata: Metadata = {
-  title: `${BRAND.name} — Write once. Publish everywhere.`,
-  description: BRAND.description,
-};
+export const metadata: Metadata = { title: `${BRAND.name} — Your social universe, in sync`, description: BRAND.description };
 
-const FAQS = [
-  {
-    q: "Do I need developer accounts for each social network?",
-    a: "To publish, yes — every network requires its own app credentials, and that is a platform rule rather than ours. Velox Viral ships the full integration for each one; you add the credentials in your environment and the channel activates immediately.",
-  },
-  {
-    q: "Where do the analytics numbers come from?",
-    a: "Each platform's own insights API. We collect, normalise and store them so trends survive across platforms and time. Before you connect an account there is nothing to show, and the dashboard says so.",
-  },
-  {
-    q: "What happens if a scheduled post fails on one platform?",
-    a: "Each platform is tracked as a separate target with its own status, error and retry count. If X succeeds and Instagram rejects the caption, the post is marked partially published, you're notified, and you can retry just that channel.",
-  },
-  {
-    q: "How do I recover my account if I forget my password?",
-    a: "During signup you set a security phrase — something personal you'll remember. If you forget your password, enter your email and that phrase to verify your identity and set a new one. No email link required.",
-  },
-  {
-    q: "How are my access tokens stored?",
-    a: "Encrypted with AES-256-GCM in the application layer, held in a table that no browser session can read, and used only by server-side publishing code. The encryption key lives in your environment, never in the database.",
-  },
-  {
-    q: "Can I cancel or change plan?",
-    a: "Any time. Plan limits are enforced server-side, so changes take effect straight away and your existing drafts and history are never touched.",
-  },
+const features = [
+  { number: "01 / CREATE", title: "Make the idea happen.", description: "Turn a spark into a scroll-stopping post. Write once, then tailor your message for every platform.", icon: PenLine, visual: "create" },
+  { number: "02 / PUBLISH", title: "Be everywhere, effortlessly.", description: "Plan your content, schedule it ahead, and keep your channels moving from one simple workspace.", icon: CalendarDays, visual: "publish" },
+  { number: "03 / INTELLIGENCE", title: "Create with a little help.", description: "Find your next great angle, refine your captions, and make more of every idea with AI.", icon: Sparkles, visual: "ai" },
+  { number: "04 / INSIGHTS", title: "Know what resonates.", description: "See how your content performs across channels and turn real insights into your next move.", icon: BarChart3, visual: "insights" },
 ];
+const platforms = ["Instagram", "TikTok", "LinkedIn", "Facebook", "X", "YouTube", "Threads"];
+const faqs = [
+  ["How do I get started?", "Create your account, connect a social channel, and start creating from your workspace."],
+  ["Can I publish to multiple platforms?", "Yes. Create a post once and tailor it for your connected social channels."],
+  ["Is there a free plan?", "Yes. You can get started for free and upgrade when you need more room to grow."],
+  ["Are my accounts secure?", "Access tokens are encrypted and used by server-side publishing code. Your data is isolated to your account."],
+];
+
+function FeatureVisual({ type }: { type: string }) {
+  if (type === "create") return <div className="mock-window"><div className="mock-top"><span className="mock-dots">● ● ●</span><span>New post</span><MoreHorizontal size={15}/></div><div className="mock-body"><div className="mock-label">YOUR WORKSPACE <span>✦</span></div><div className="mock-title">What are we sharing today?</div><div className="mock-lines"><i/><i/><i/></div><div className="mock-bottom"><span>＋ Add media</span><b>Continue <ArrowRight size={12}/></b></div></div></div>;
+  if (type === "publish") return <div className="mock-window calendar"><div className="mock-top"><span>Content calendar</span><span>•••</span></div><div className="calendar-head"><b>September 2026</b><span>‹ &nbsp; ›</span></div><div className="calendar-grid">{["M","T","W","T","F","S","S",...Array.from({length:28},(_,i)=>String(i+1))].map((d,i)=><span className={i===10||i===16||i===25?"active":""} key={i}>{d}{(i===10||i===16||i===25)&&<small>●</small>}</span>)}</div><div className="calendar-note"><CircleCheck size={15}/> Your content is on track</div></div>;
+  if (type === "ai") return <div className="mock-window ai-mock"><div className="mock-top"><span>✦ &nbsp; AI caption studio</span><span>•••</span></div><div className="ai-icon"><Sparkles size={20}/></div><b>Let’s make something great.</b><p>What would you like to create today?</p><div className="prompt">Write a post about my latest idea <span>↑</span></div><div className="suggestions"><span>✦ Generate ideas</span><span>↗ Rewrite</span></div></div>;
+  return <div className="mock-window analytics"><div className="mock-top"><span>Performance overview</span><span>Last 30 days ﹀</span></div><div className="analytics-stat"><span>YOUR CONTENT AT A GLANCE</span><b>Make every post count.</b><small>Understand what’s working across your channels.</small></div><div className="chart"><div className="chart-bars">{[30,43,37,58,46,70,62,86,72,95,79,100].map((h,i)=><i key={i} style={{height:`${h}%`}}/>)}</div></div></div>;
+}
 
 export default function LandingPage() {
   const currency = serverEnv.PAYSTACK_CURRENCY ?? DEFAULT_BILLING_CURRENCY;
-
-  // Prepare plan data for the client-side MotionPricing component.
-  const planData = PLAN_ORDER.map((planId) => PLANS[planId]);
-
-  return (
-    <div className="min-h-screen">
-      <MarketingNav />
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Hero                                                                */}
-      {/* ------------------------------------------------------------------ */}
-      <section className="relative pt-36 sm:pt-44 pb-20 sm:pb-28 px-4 sm:px-6 overflow-hidden">
-        <FloatingOrbs />
-
-        <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="space-y-8">
-            <Reveal>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400/90 border border-amber-500/15">
-                <Sparkles className="w-3.5 h-3.5" />
-                AI social operating system
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.06}>
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white tracking-[-0.02em] leading-[1.08]">
-                Write once.
-                <br />
-                <span className="text-amber-400">
-                  Publish everywhere.
-                </span>
-              </h1>
-            </Reveal>
-
-            <Reveal delay={0.12}>
-              <p className="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-lg">
-                {BRAND.name} turns a single draft into platform-native posts for seven
-                networks, schedules them server-side, and reports what genuinely
-                published — per channel, with real numbers.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.18}>
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <Button
-                  asChild
-                  variant="gradient"
-                  size="lg"
-                  className="h-12 px-7 rounded-xl text-sm font-semibold"
-                >
-                  <Link href="/signup">
-                    <span>Create free account</span>
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-
-                <Button
-                  asChild
-                  variant="apple"
-                  size="lg"
-                  className="h-12 px-7 rounded-xl text-sm"
-                >
-                  <Link href="/login">I already have an account</Link>
-                </Button>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.24}>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-zinc-500">
-                <span className="inline-flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-amber-500/80" />
-                  Free plan, no card required
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-500/80" />
-                  Encrypted tokens, row-level isolation
-                </span>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.15} y={26}>
-            <FlywheelVisual />
-          </Reveal>
+  return <div className="landing">
+    <MarketingNav />
+    <main>
+      <section className="hero grid-bg">
+        <div className="hero-orb orb-one">✦</div><div className="hero-orb orb-two">◎</div><div className="hero-orb orb-three">↗</div><div className="hero-orb orb-four">✳</div>
+        <div className="hero-inner">
+          <div className="eyebrow"><span className="status-dot"/> YOUR SOCIAL WORKSPACE, REIMAGINED <ArrowUpRight size={13}/></div>
+          <h1>Your ideas deserve<br/><span>more</span> everywhere.</h1>
+          <p>Meet your all-in-one social workspace. Create, schedule, and grow across platforms — all at the speed of your ideas.</p>
+          <div className="hero-actions"><Link className="primary-btn" href="/signup">Get started for free <ArrowRight size={16}/></Link><a className="secondary-btn" href="#features">Explore the platform <ArrowRight size={16}/></a></div>
+          <div className="hero-note"><Check size={14}/> Free to get started <span>·</span> Built for your next big idea</div>
         </div>
+        <div className="hero-bottom"><span>THE FUTURE OF SOCIAL IS YOURS</span><span>SCROLL TO EXPLORE ↓</span></div>
       </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Platforms                                                           */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="platforms" className="py-16 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-6xl mx-auto">
-          <Reveal>
-            <p className="text-center text-[11px] font-semibold text-zinc-500 uppercase tracking-[0.25em] mb-10">
-              One draft. Seven native formats.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <MotionPlatforms />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Features                                                            */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="features" className="py-24 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-6xl mx-auto">
-          <Reveal>
-            <div className="max-w-2xl mb-16">
-              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
-                Features
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
-                Everything real.
-                <br />
-                Nothing simulated.
-              </h2>
-              <p className="mt-4 text-sm text-zinc-400 leading-relaxed max-w-lg">
-                Every number comes from a platform API, every publish is confirmed by
-                the network before we call it published.
-              </p>
-            </div>
-          </Reveal>
-
-          <MotionFeatures />
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* How it works                                                        */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="how-it-works" className="py-24 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-5xl mx-auto">
-          <Reveal>
-            <div className="text-center mb-16">
-              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
-                How it works
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
-                Three steps to a running channel
-              </h2>
-            </div>
-          </Reveal>
-
-          <MotionSteps />
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Pricing                                                             */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="pricing" className="py-24 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-5xl mx-auto">
-          <Reveal>
-            <div className="text-center mb-14">
-              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
-                Pricing
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
-                Start free. Upgrade when you outgrow it.
-              </h2>
-              <p className="mt-3 text-sm text-zinc-400">
-                Limits are enforced on the server, so what a plan says is what a plan does.
-              </p>
-            </div>
-          </Reveal>
-
-          <MotionPricing plans={planData} currency={currency} />
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* FAQ                                                                 */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="faq" className="py-24 px-4 sm:px-6 scroll-mt-24">
-        <div className="max-w-2xl mx-auto">
-          <Reveal>
-            <div className="text-center mb-12">
-              <span className="text-[11px] font-semibold text-amber-500/80 uppercase tracking-[0.25em] mb-4 block">
-                FAQ
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
-                Straight answers
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="space-y-2">
-            {FAQS.map((faq, index) => (
-              <Reveal key={faq.q} delay={index * 0.04}>
-                <details className="group surface-card rounded-xl overflow-hidden">
-                  <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl">
-                    <span className="text-sm font-semibold text-zinc-200">{faq.q}</span>
-                    <span
-                      aria-hidden
-                      className="shrink-0 w-6 h-6 rounded-md bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-zinc-500 transition-transform duration-200 group-open:rotate-45"
-                    >
-                      <span className="text-base leading-none">+</span>
-                    </span>
-                  </summary>
-                  <div className="px-5 pb-5 -mt-1">
-                    <p className="text-[13px] text-zinc-400 leading-relaxed">
-                      {faq.a}
-                    </p>
-                  </div>
-                </details>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Closing CTA                                                         */}
-      {/* ------------------------------------------------------------------ */}
-      <section className="py-24 px-4 sm:px-6">
-        <Reveal>
-          <div className="relative max-w-4xl mx-auto rounded-2xl border border-white/[0.06] p-8 sm:p-14 text-center overflow-hidden">
-            <div
-              aria-hidden
-              className="absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[350px] bg-gradient-to-b from-amber-500/[0.08] via-transparent to-transparent blur-3xl pointer-events-none"
-            />
-            <div className="relative space-y-6">
-              <div className="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-zinc-950 mx-auto">
-                <Zap className="w-6 h-6 fill-zinc-950" />
-              </div>
-
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
-                Stop rewriting the same post
-                <br className="hidden sm:block" />
-                {" "}seven times
-              </h2>
-              <p className="text-sm sm:text-base text-zinc-400 max-w-md mx-auto leading-relaxed">
-                Create an account, connect a channel, and publish your first
-                cross-platform post in a few minutes.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-2">
-                <Button
-                  asChild
-                  variant="gradient"
-                  size="lg"
-                  className="h-12 px-8 rounded-xl text-sm font-semibold"
-                >
-                  <Link href="/signup">
-                    <span>Create free account</span>
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="apple"
-                  size="lg"
-                  className="h-12 px-8 rounded-xl text-sm"
-                >
-                  <Link href="/login">Log in</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Footer                                                              */}
-      {/* ------------------------------------------------------------------ */}
-      <footer className="border-t border-white/[0.04] py-10 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
-          <Logo size="sm" withTagline />
-
-          <nav className="flex items-center gap-5 text-xs text-zinc-500">
-            <a href="#features" className="hover:text-zinc-300 transition-colors">
-              Features
-            </a>
-            <a href="#pricing" className="hover:text-zinc-300 transition-colors">
-              Pricing
-            </a>
-            <Link href="/login" className="hover:text-zinc-300 transition-colors">
-              Log in
-            </Link>
-            <Link href="/signup" className="hover:text-zinc-300 transition-colors">
-              Sign up
-            </Link>
-          </nav>
-
-          <span className="text-[11px] text-zinc-600">
-            © {new Date().getFullYear()} {BRAND.name}
-          </span>
-        </div>
-      </footer>
-    </div>
-  );
+      <section className="platform-strip" id="platforms"><div><span className="section-kicker">ONE WORKSPACE. ALL YOUR WORLDS.</span><h2>Made for the places<br/>you show up.</h2></div><div className="platform-list">{platforms.map((p,i)=><span key={p}><b>{["◎","♪","in","f","𝕏","▶","@ "][i]}</b>{p}</span>)}</div></section>
+      <section className="features-section" id="features"><div className="section-heading"><div><span className="section-kicker">THE VELOX VIRAL PLATFORM</span><h2>Less busywork.<br/><span>More brilliant work.</span></h2></div><p>Everything you need to bring your ideas to life and build your presence, together in one beautifully simple space.</p></div><div className="feature-grid">{features.map((f)=><article className="feature-card" key={f.number}><div className={`feature-visual ${f.visual}`}><FeatureVisual type={f.visual}/></div><div className="feature-copy"><div className="feature-meta"><span>{f.number}</span><f.icon size={17}/></div><h3>{f.title}</h3><p>{f.description}</p><Link href="/signup">Explore feature <ArrowRight size={15}/></Link></div></article>)}</div></section>
+      <section className="workflow grid-bg" id="how-it-works"><div className="workflow-copy"><span className="section-kicker">A BETTER WAY TO SHOW UP</span><h2>From first thought<br/>to <em>out in the world.</em></h2><p>Good ideas move fast. Your workflow should too. Bring everything together and make space for the work that matters.</p><Link className="primary-btn" href="/signup">Start creating <ArrowRight size={16}/></Link></div><div className="workflow-steps">{[["01","Create your content","Start with an idea and make it yours."],["02","Plan your moment","Choose your channels and schedule ahead."],["03","Grow with intention","Learn from your results and keep creating."]].map(([n,t,d])=><div className="workflow-step" key={n}><span>{n}</span><div><h3>{t}</h3><p>{d}</p></div><ArrowUpRight size={18}/></div>)}</div></section>
+      <section className="pricing-section" id="pricing"><div className="center-heading"><span className="section-kicker">SIMPLE, FLEXIBLE PRICING</span><h2>Make room for your next big thing.</h2><p>Start where you are. Grow at your own pace.</p></div><div className="pricing-grid">{PLAN_ORDER.map(id=>{const plan=PLANS[id]; return <article className={`price-card ${plan.highlighted ? "featured-price" : ""}`} key={id}>{plan.highlighted && <span className="popular">POPULAR</span>}<h3>{plan.name}</h3><p>{plan.tagline}</p><div className="price">{formatPlanPrice(plan,currency)} {planAmount(plan,currency)>0 && <small>/ month</small>}</div><Link href="/signup" className={plan.highlighted ? "primary-btn" : "secondary-btn"}>Get started <ArrowRight size={15}/></Link><ul>{plan.features.map(feature=><li key={feature}><Check size={15}/>{feature}</li>)}</ul></article>})}</div></section>
+      <section className="faq-section" id="faq"><div><span className="section-kicker">GOOD TO KNOW</span><h2>Questions?<br/><span>We've got you.</span></h2></div><div>{faqs.map(([q,a])=><details key={q}><summary>{q}<ChevronDown size={18}/></summary><p>{a}</p></details>)}</div></section>
+      <section className="closing-wrap"><div className="closing grid-bg"><span className="section-kicker">YOUR NEXT CHAPTER STARTS HERE</span><h2>Make your mark<br/>on the internet.</h2><p>Big ideas start somewhere. Let’s make yours go further.</p><Link className="primary-btn" href="/signup">Get started for free <ArrowRight size={16}/></Link><small>Free to get started. Made for what’s next.</small></div></section>
+    </main>
+    <footer className="landing-footer"><div className="footer-top"><div><Link className="brand" href="/"><span className="brand-mark"><Zap size={18} fill="currentColor"/></span>velox<span>viral</span></Link><p>Your ideas, in motion.<br/>Your social universe, in sync.</p></div><div className="footer-links"><div><b>EXPLORE</b><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#platforms">Platforms</a></div><div><b>GET STARTED</b><a href="#pricing">Pricing</a><Link href="/signup">Create account</Link><Link href="/login">Log in</Link></div><div><b>THE DETAILS</b><a href="#faq">FAQ</a><span>Built for creators</span><span>Made for momentum</span></div></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Velox Viral. All rights reserved.</span><span>CREATE WITH INTENTION &nbsp; ✦</span></div></footer>
+  </div>;
 }

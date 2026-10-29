@@ -137,19 +137,19 @@ export const ContentLibrary: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
       {/* Library Header */}
-      <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="glass-panel rounded-3xl p-6 border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-700 border border-blue-500/30 flex items-center gap-1.5">
+              <BookOpen className="w-3.5 h-3.5 text-blue-600" />
               Creator Knowledge Bank
             </span>
             <Badge variant="purple">50+ Viral Formulas</Badge>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             Content Library & Viral Hook Bank
           </h2>
-          <p className="text-xs text-zinc-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Battle-tested hooks, frameworks, multi-platform templates, and high-converting copy formulas.
           </p>
         </div>
@@ -168,7 +168,7 @@ export const ContentLibrary: React.FC = () => {
 
       {/* Tabs Switcher (Hooks vs Templates vs Assets) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-1 bg-zinc-900/90 p-1 rounded-2xl border border-white/10">
+        <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-2xl border border-slate-200">
           {[
             { id: "hooks", label: "🔥 Viral Hooks Bank (50+)", icon: Flame },
             { id: "templates", label: "📄 Post Templates", icon: FileText },
@@ -179,8 +179,8 @@ export const ContentLibrary: React.FC = () => {
               className={cn(
                 "px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all",
                 activeTab === tab.id
-                  ? "bg-white/20 text-white shadow-sm border border-white/15"
-                  : "text-zinc-400 hover:text-white"
+                  ? "bg-slate-100/80 text-slate-900 shadow-sm border border-slate-200"
+                  : "text-slate-500 hover:text-slate-900"
               )}
             >
               <tab.icon className="w-3.5 h-3.5" />
@@ -191,13 +191,13 @@ export const ContentLibrary: React.FC = () => {
 
         {/* Search Bar */}
         <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search formulas, hooks, templates..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-zinc-950/70 border border-white/10 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+            className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           />
         </div>
       </div>
@@ -207,7 +207,7 @@ export const ContentLibrary: React.FC = () => {
         <div className="space-y-4">
           {/* Niche & Category Filters */}
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-            <span className="text-xs text-zinc-400 font-medium mr-1 shrink-0">Niche:</span>
+            <span className="text-xs text-slate-500 font-medium mr-1 shrink-0">Niche:</span>
             {[
               "all",
               "Tech & AI",
@@ -222,8 +222,8 @@ export const ContentLibrary: React.FC = () => {
                 className={cn(
                   "px-3 py-1 rounded-xl text-xs font-semibold transition-all border shrink-0",
                   selectedNiche === n
-                    ? "bg-indigo-600 border-indigo-500 text-white"
-                    : "bg-white/[0.02] border-white/5 text-zinc-400 hover:text-white"
+                    ? "bg-blue-600 border-blue-500 text-white"
+                    : "bg-slate-100/80 border-slate-200 text-slate-500 hover:text-slate-900"
                 )}
               >
                 {n === "all" ? "All Niches" : n}
@@ -238,15 +238,15 @@ export const ContentLibrary: React.FC = () => {
                 key={h.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card rounded-3xl p-5 border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between space-y-3 group"
+                className="glass-card rounded-3xl p-5 border border-slate-200 hover:border-slate-200 transition-all flex flex-col justify-between space-y-3 group"
               >
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/20">
+                      <span className="text-[11px] font-bold text-blue-600 bg-blue-400/10 px-2.5 py-0.5 rounded-lg border border-blue-400/20">
                         {h.category}
                       </span>
-                      <span className="text-[10px] text-zinc-400 font-medium">
+                      <span className="text-[10px] text-slate-500 font-medium">
                         {h.niche}
                       </span>
                     </div>
@@ -256,31 +256,31 @@ export const ContentLibrary: React.FC = () => {
                   </div>
 
                   {/* Formula Template */}
-                  <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 font-mono text-[11px] text-indigo-300">
-                    <span className="text-zinc-500 block mb-0.5 text-[9px] uppercase tracking-wider">
+                  <div className="p-2.5 rounded-xl bg-slate-100/80 border border-slate-200 font-mono text-[11px] text-blue-700">
+                    <span className="text-slate-500 block mb-0.5 text-[9px] uppercase tracking-wider">
                       Formula Pattern:
                     </span>
                     {h.template}
                   </div>
 
                   {/* High Converting Example */}
-                  <div className="p-3 rounded-2xl bg-black/40 border border-white/5 text-xs text-zinc-200 leading-relaxed font-sans">
-                    <span className="text-zinc-500 block mb-0.5 text-[9px] uppercase tracking-wider font-mono">
+                  <div className="p-3 rounded-2xl bg-black/40 border border-slate-200 text-xs text-slate-700 leading-relaxed font-sans">
+                    <span className="text-slate-500 block mb-0.5 text-[9px] uppercase tracking-wider font-mono">
                       Live Example:
                     </span>
                     &ldquo;{h.example}&rdquo;
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                <div className="flex items-center justify-between pt-2 border-t border-slate-200">
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => handleCopy(h.example, h.id)}
-                    className="h-8 px-2.5 text-xs text-zinc-400 hover:text-white"
+                    className="h-8 px-2.5 text-xs text-slate-500 hover:text-slate-900"
                   >
                     {copiedId === h.id ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400 mr-1" />
+                      <Check className="w-3.5 h-3.5 text-emerald-700 mr-1" />
                     ) : (
                       <Copy className="w-3.5 h-3.5 mr-1" />
                     )}
@@ -291,7 +291,7 @@ export const ContentLibrary: React.FC = () => {
                     variant="apple"
                     size="sm"
                     onClick={() => handleUseHook(h.example)}
-                    className="h-8 px-3 text-xs font-semibold text-white bg-indigo-600/30 hover:bg-indigo-600/50 border-indigo-500/30 rounded-xl"
+                    className="h-8 px-3 text-xs font-semibold text-slate-900 bg-blue-600/30 hover:bg-blue-600/50 border-blue-500/30 rounded-xl"
                   >
                     <span>Use in Composer</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
@@ -311,7 +311,7 @@ export const ContentLibrary: React.FC = () => {
               key={t.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass-card rounded-3xl p-5 border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between space-y-4 group"
+              className="glass-card rounded-3xl p-5 border border-slate-200 hover:border-slate-200 transition-all flex flex-col justify-between space-y-4 group"
             >
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
@@ -319,26 +319,26 @@ export const ContentLibrary: React.FC = () => {
                     {t.platform !== "all" && (
                       <PlatformIcon platform={t.platform} className="w-4 h-4" />
                     )}
-                    <h4 className="font-bold text-sm text-white">{t.title}</h4>
+                    <h4 className="font-bold text-sm text-slate-900">{t.title}</h4>
                   </div>
                   <Badge variant="purple" className="text-[10px] capitalize">
                     {t.category}
                   </Badge>
                 </div>
 
-                <p className="text-xs text-zinc-400">{t.description}</p>
+                <p className="text-xs text-slate-500">{t.description}</p>
 
-                <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 text-xs text-zinc-200 leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto no-scrollbar font-sans">
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-slate-200 text-xs text-slate-700 leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto no-scrollbar font-sans">
                   {t.content}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/5">
+              <div className="flex items-center justify-between pt-2 border-t border-slate-200">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => deleteTemplate(t.id)}
-                  className="h-8 text-zinc-500 hover:text-rose-400 text-xs px-2"
+                  className="h-8 text-slate-500 hover:text-rose-600 text-xs px-2"
                 >
                   <Trash2 className="w-3.5 h-3.5 mr-1" />
                   Delete
@@ -349,10 +349,10 @@ export const ContentLibrary: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleCopy(t.content, t.id)}
-                    className="h-8 px-2.5 text-xs text-zinc-400 hover:text-white"
+                    className="h-8 px-2.5 text-xs text-slate-500 hover:text-slate-900"
                   >
                     {copiedId === t.id ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <Check className="w-3.5 h-3.5 text-emerald-700" />
                     ) : (
                       <Copy className="w-3.5 h-3.5" />
                     )}
@@ -379,13 +379,13 @@ export const ContentLibrary: React.FC = () => {
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="glass-panel rounded-3xl p-6 max-w-lg w-full border border-white/15 space-y-4"
+            className="glass-panel rounded-3xl p-6 max-w-lg w-full border border-slate-200 space-y-4"
           >
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="font-bold text-base text-white">Create New Custom Template</h3>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h3 className="font-bold text-base text-slate-900">Create New Custom Template</h3>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="text-zinc-400 hover:text-white"
+                className="text-slate-500 hover:text-slate-900"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -393,7 +393,7 @@ export const ContentLibrary: React.FC = () => {
 
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
                   Template Title
                 </label>
                 <input
@@ -401,12 +401,12 @@ export const ContentLibrary: React.FC = () => {
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   placeholder="E.g. Weekly Teardown Framework"
-                  className="w-full rounded-xl bg-zinc-950 border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full rounded-xl bg-slate-50 border border-slate-200 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
                   Description
                 </label>
                 <input
@@ -414,12 +414,12 @@ export const ContentLibrary: React.FC = () => {
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
                   placeholder="Brief note on how to use this template..."
-                  className="w-full rounded-xl bg-zinc-950 border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full rounded-xl bg-slate-50 border border-slate-200 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
                   Content / Prompt Blueprint
                 </label>
                 <textarea
@@ -427,17 +427,17 @@ export const ContentLibrary: React.FC = () => {
                   onChange={(e) => setNewContent(e.target.value)}
                   placeholder="Write your template structure with [Placeholders]..."
                   rows={5}
-                  className="w-full rounded-xl bg-zinc-950 border border-white/10 p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none leading-relaxed"
+                  className="w-full rounded-xl bg-slate-50 border border-slate-200 p-3 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none leading-relaxed"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowCreateModal(false)}
-                className="text-xs text-zinc-400"
+                className="text-xs text-slate-500"
               >
                 Cancel
               </Button>

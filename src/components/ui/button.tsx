@@ -9,23 +9,23 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-amber-500 text-zinc-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400 font-semibold",
+          "bg-blue-500 text-slate-50 shadow-lg shadow-blue-500/20 hover:bg-blue-400 font-semibold",
         apple:
-          "bg-white/[0.06] hover:bg-white/[0.1] text-zinc-200 border border-white/[0.08] backdrop-blur-sm",
+          "bg-slate-100/80 hover:bg-slate-100/80 text-slate-700 border border-slate-200 backdrop-blur-sm",
         gradient:
-          "bg-gradient-to-r from-amber-500 to-amber-400 text-zinc-950 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 font-semibold border border-amber-400/30",
+          "bg-gradient-to-r from-blue-500 to-blue-400 text-slate-50 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-semibold border border-blue-400/30",
         destructive:
-          "bg-red-500/15 text-red-400 border border-red-500/20 hover:bg-red-500/25",
+          "bg-red-500/15 text-red-600 border border-red-500/20 hover:bg-red-500/25",
         outline:
-          "border border-white/[0.08] bg-transparent hover:bg-white/[0.04] text-zinc-300 hover:text-white",
+          "border border-slate-200 bg-transparent hover:bg-slate-100/80 text-slate-600 hover:text-slate-900",
         secondary:
-          "bg-zinc-800/60 hover:bg-zinc-700/60 text-zinc-200 border border-zinc-700/30",
+          "bg-slate-50 hover:bg-slate-50 text-slate-700 border border-slate-200",
         ghost:
-          "hover:bg-white/[0.06] text-zinc-400 hover:text-zinc-100",
+          "hover:bg-slate-100/80 text-slate-500 hover:text-slate-800",
         link:
-          "text-amber-500 underline-offset-4 hover:underline",
+          "text-blue-500 underline-offset-4 hover:underline",
         glass:
-          "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/[0.08] backdrop-blur-md",
+          "bg-slate-100/80 hover:bg-slate-100/80 text-slate-900 border border-slate-200 backdrop-blur-md",
       },
       size: {
         default: "h-10 px-4 py-2",

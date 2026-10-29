@@ -73,14 +73,14 @@ export const PlatformPreviews: React.FC<PlatformPreviewsProps> = ({
   return (
     <div className="flex flex-col h-full">
       {/* Device & Theme Toolbar */}
-      <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
+      <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-200">
         {/* Device Switcher */}
-        <div className="flex items-center gap-1 bg-zinc-900/90 p-1 rounded-xl border border-white/10">
+        <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-200">
           <Button
             variant={device === "iphone" ? "apple" : "ghost"}
             size="sm"
             onClick={() => setDevice("iphone")}
-            className={cn("h-7 px-2 text-xs", device === "iphone" && "bg-white/20 text-white")}
+            className={cn("h-7 px-2 text-xs", device === "iphone" && "bg-slate-100/80 text-slate-900")}
             title="iPhone Preview"
           >
             <Smartphone className="w-3.5 h-3.5 mr-1" />
@@ -90,7 +90,7 @@ export const PlatformPreviews: React.FC<PlatformPreviewsProps> = ({
             variant={device === "desktop" ? "apple" : "ghost"}
             size="sm"
             onClick={() => setDevice("desktop")}
-            className={cn("h-7 px-2 text-xs", device === "desktop" && "bg-white/20 text-white")}
+            className={cn("h-7 px-2 text-xs", device === "desktop" && "bg-slate-100/80 text-slate-900")}
             title="Desktop Preview"
           >
             <Monitor className="w-3.5 h-3.5 mr-1" />
@@ -100,7 +100,7 @@ export const PlatformPreviews: React.FC<PlatformPreviewsProps> = ({
             variant={device === "tablet" ? "apple" : "ghost"}
             size="sm"
             onClick={() => setDevice("tablet")}
-            className={cn("h-7 px-2 text-xs", device === "tablet" && "bg-white/20 text-white")}
+            className={cn("h-7 px-2 text-xs", device === "tablet" && "bg-slate-100/80 text-slate-900")}
             title="Tablet Preview"
           >
             <Tablet className="w-3.5 h-3.5 mr-1" />
@@ -109,22 +109,22 @@ export const PlatformPreviews: React.FC<PlatformPreviewsProps> = ({
         </div>
 
         {/* Theme Preview Switcher */}
-        <div className="flex items-center gap-1 bg-zinc-900/90 p-1 rounded-xl border border-white/10">
+        <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-200">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setPreviewTheme(previewTheme === "dark" ? "light" : "dark")}
-            className="h-7 px-2.5 text-xs text-zinc-300 hover:text-white"
+            className="h-7 px-2.5 text-xs text-slate-600 hover:text-slate-900"
             title="Toggle Light/Dark Preview"
           >
             {previewTheme === "dark" ? (
               <>
-                <Moon className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
+                <Moon className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
                 <span className="text-xs">Dark</span>
               </>
             ) : (
               <>
-                <Sun className="w-3.5 h-3.5 mr-1.5 text-amber-400" />
+                <Sun className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
                 <span className="text-xs">Light</span>
               </>
             )}
@@ -442,7 +442,7 @@ export const PlatformPreviews: React.FC<PlatformPreviewsProps> = ({
                         <span className="text-zinc-500 text-[10px]">· 1st</span>
                       </div>
                       <p className="text-[10px] text-zinc-400 line-clamp-1">
-                        Founder @ ViralFlow | Scaling Organic Growth Engines | AI Architecture
+                        Founder @ Velox Viral | Scaling Organic Growth Engines | AI Architecture
                       </p>
                       <span className="text-[10px] text-zinc-500 flex items-center gap-1 mt-0.5">
                         3h · 🌐

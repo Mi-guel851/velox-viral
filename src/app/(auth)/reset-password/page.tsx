@@ -12,14 +12,14 @@ function ResetFallback() {
   return (
     <div className="space-y-6 animate-pulse">
       <div className="space-y-2">
-        <div className="w-10 h-10 rounded-xl bg-white/[0.06]" />
-        <div className="h-7 w-52 rounded-lg bg-white/[0.06]" />
-        <div className="h-4 w-64 rounded bg-white/[0.04]" />
+        <div className="w-10 h-10 rounded-xl bg-slate-100/80" />
+        <div className="h-7 w-52 rounded-lg bg-slate-100/80" />
+        <div className="h-4 w-64 rounded bg-slate-100/80" />
       </div>
       <div className="space-y-4">
-        <div className="h-[70px] rounded-xl bg-white/[0.04]" />
-        <div className="h-[70px] rounded-xl bg-white/[0.04]" />
-        <div className="h-12 rounded-xl bg-white/[0.06]" />
+        <div className="h-[70px] rounded-xl bg-slate-100/80" />
+        <div className="h-[70px] rounded-xl bg-slate-100/80" />
+        <div className="h-12 rounded-xl bg-slate-100/80" />
       </div>
     </div>
   );

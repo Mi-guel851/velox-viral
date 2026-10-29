@@ -56,21 +56,21 @@ export const AppHeader: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-4 z-30 mb-6 rounded-3xl glass-panel border border-white/10 px-4 sm:px-6 py-3 flex items-center justify-between gap-4 shadow-xl">
+    <header className="sticky top-4 z-30 mb-6 rounded-3xl glass-panel border border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-4 shadow-xl">
       {/* Left: Current Section Title & Platform Badges */}
       <div className="flex items-center gap-3">
         <div className="md:hidden flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs shadow-md">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-md">
             <Zap className="w-4 h-4 fill-white" />
           </div>
         </div>
 
         <div>
-          <h2 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <span>{getPageTitle()}</span>
           </h2>
-          <span className="hidden sm:block text-[11px] text-zinc-400 font-medium">
-            {displayName} • {settings.workspaceName || "ViralFlow"}
+          <span className="hidden sm:block text-[11px] text-slate-500 font-medium">
+            {displayName} • {settings.workspaceName || "Velox Viral"}
           </span>
         </div>
       </div>
@@ -80,15 +80,15 @@ export const AppHeader: React.FC = () => {
         {/* Connected Channels Pill */}
         <div
           onClick={() => setActiveTab("accounts")}
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/[0.03] hover:bg-white/10 border border-white/10 cursor-pointer transition-all"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-slate-100/80 hover:bg-slate-100/80 border border-slate-200 cursor-pointer transition-all"
           title={`${accounts.length} Connected Social Channel${accounts.length !== 1 ? "s" : ""}`}
         >
           <div className="flex items-center -space-x-1">
             {ALL_PLATFORMS.slice(0, 5).map((p) => (
-              <PlatformIcon key={p} platform={p} className="w-3.5 h-3.5 text-zinc-300" />
+              <PlatformIcon key={p} platform={p} className="w-3.5 h-3.5 text-slate-600" />
             ))}
           </div>
-          <span className="text-[11px] font-semibold text-emerald-400 flex items-center gap-1">
+          <span className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             {accounts.length} Live
           </span>
@@ -97,9 +97,9 @@ export const AppHeader: React.FC = () => {
         {/* AI Engine Status Pill */}
         <div
           onClick={() => setActiveTab("settings")}
-          className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold cursor-pointer hover:bg-indigo-500/20 transition-all"
+          className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-700 text-xs font-semibold cursor-pointer hover:bg-blue-500/20 transition-all"
         >
-          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
           <span>AI Engine Ready</span>
         </div>
 

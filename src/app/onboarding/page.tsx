@@ -37,7 +37,7 @@ export default async function OnboardingPage() {
       {/* Subtle warm glow */}
       <div
         aria-hidden
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-amber-500/[0.04] via-transparent to-transparent blur-3xl pointer-events-none"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-blue-500/[0.04] via-transparent to-transparent blur-3xl pointer-events-none"
       />
 
       <div className="relative w-full max-w-md space-y-6">
@@ -45,17 +45,17 @@ export default async function OnboardingPage() {
           <Logo size="md" />
         </div>
 
-        <div className="surface-elevated rounded-2xl border border-white/[0.06] p-6 sm:p-8">
+        <div className="surface-elevated rounded-2xl border border-slate-200 p-6 sm:p-8">
           <div className="space-y-6">
             <div className="space-y-1.5">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/15 flex items-center justify-center text-amber-400 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center text-blue-600 mb-3">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h1 className="font-display text-2xl font-bold text-white tracking-tight">
+              <h1 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
                 One last thing
               </h1>
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                Set a <span className="text-zinc-200 font-medium">security phrase</span> you&apos;ll
+              <p className="text-sm text-slate-500 leading-relaxed">
+                Set a <span className="text-slate-700 font-medium">security phrase</span> you&apos;ll
                 remember. You&apos;ll use this to recover your account if you ever
                 forget your password.
               </p>

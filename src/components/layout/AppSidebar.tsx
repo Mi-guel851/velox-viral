@@ -63,7 +63,7 @@ export const AppSidebar: React.FC = () => {
       className={cn(
         "hidden md:flex flex-col justify-between h-[calc(100vh-2rem)] sticky top-4 z-40 transition-all duration-300 ease-in-out",
         sidebarCollapsed ? "w-20" : "w-64",
-        "glass-panel rounded-3xl border border-white/10 p-3 shadow-2xl"
+        "glass-panel rounded-3xl border border-slate-200 p-3 shadow-2xl"
       )}
     >
       {/* Top Brand Logo */}
@@ -71,32 +71,32 @@ export const AppSidebar: React.FC = () => {
         <div className="flex items-center justify-between px-2 pt-2">
           {!sidebarCollapsed ? (
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 ring-1 ring-white/20">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 via-blue-500 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 ring-1 ring-slate-200">
                 <Zap className="w-5 h-5 fill-white" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-base tracking-tight text-white font-sans">
-                    ViralFlow
+                  <span className="font-extrabold text-base tracking-tight text-slate-900 font-sans">
+                    Velox Viral
                   </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-blue-500/20 text-blue-700 border border-blue-500/30">
                     AI
                   </span>
                 </div>
-                <span className="text-[10px] text-zinc-400 block font-medium">
+                <span className="text-[10px] text-slate-500 block font-medium">
                   Social Operating System
                 </span>
               </div>
             </div>
           ) : (
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white shadow-lg mx-auto">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 via-blue-500 to-blue-500 flex items-center justify-center text-white shadow-lg mx-auto">
               <Zap className="w-5 h-5 fill-white" />
             </div>
           )}
 
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="text-zinc-500 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors"
+            className="text-slate-500 hover:text-slate-900 p-1 rounded-lg hover:bg-slate-100/80 transition-colors"
           >
             {sidebarCollapsed ? (
               <ChevronRight className="w-4 h-4" />
@@ -112,7 +112,7 @@ export const AppSidebar: React.FC = () => {
             onClick={() => setActiveTab("composer")}
             variant="gradient"
             className={cn(
-              "w-full rounded-2xl shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 font-semibold h-11 transition-all",
+              "w-full rounded-2xl shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 font-semibold h-11 transition-all",
               sidebarCollapsed ? "px-0" : "px-4"
             )}
           >
@@ -132,21 +132,21 @@ export const AppSidebar: React.FC = () => {
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs font-medium transition-all duration-200 relative group select-none",
                   isActive
-                    ? "text-white bg-white/10 shadow-sm border border-white/10 font-semibold"
-                    : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
+                    ? "text-slate-900 bg-slate-100/80 shadow-sm border border-slate-200 font-semibold"
+                    : "text-slate-500 hover:text-slate-700 hover:bg-slate-100/80"
                 )}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeNavIndicator"
-                    className="absolute left-1 top-2 bottom-2 w-1 rounded-full bg-gradient-to-b from-indigo-400 to-purple-400"
+                    className="absolute left-1 top-2 bottom-2 w-1 rounded-full bg-gradient-to-b from-blue-400 to-blue-400"
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
                 <item.icon
                   className={cn(
                     "w-4 h-4 shrink-0 transition-colors",
-                    isActive ? "text-indigo-400" : "text-zinc-400 group-hover:text-white"
+                    isActive ? "text-blue-600" : "text-slate-500 group-hover:text-slate-900"
                   )}
                 />
                 {!sidebarCollapsed && (
@@ -157,8 +157,8 @@ export const AppSidebar: React.FC = () => {
                     className={cn(
                       "text-[10px] font-semibold px-1.5 py-0.5 rounded-md",
                       isActive
-                        ? "bg-indigo-500/30 text-indigo-200"
-                        : "bg-white/[0.05] text-zinc-400 group-hover:text-zinc-200"
+                        ? "bg-blue-500/30 text-blue-700"
+                        : "bg-slate-100/80 text-slate-500 group-hover:text-slate-700"
                     )}
                   >
                     {item.badge}
@@ -171,25 +171,25 @@ export const AppSidebar: React.FC = () => {
       </div>
 
       {/* Bottom Profile / Workspace Pill + Logout */}
-      <div className="p-2 border-t border-white/10 space-y-2">
+      <div className="p-2 border-t border-slate-200 space-y-2">
         <div
           onClick={() => setActiveTab("settings")}
           className={cn(
-            "flex items-center gap-2.5 p-2 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 cursor-pointer transition-all",
+            "flex items-center gap-2.5 p-2 rounded-2xl bg-slate-100/80 hover:bg-slate-100/80 border border-slate-200 cursor-pointer transition-all",
             sidebarCollapsed ? "justify-center" : ""
           )}
         >
           <img
             src={avatarUrl}
             alt="User avatar"
-            className="w-8 h-8 rounded-full object-cover ring-1 ring-white/20 shrink-0"
+            className="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200 shrink-0"
           />
           {!sidebarCollapsed && (
             <div className="min-w-0 flex-1">
-              <span className="text-xs font-bold text-white block truncate">
+              <span className="text-xs font-bold text-slate-900 block truncate">
                 {displayName}
               </span>
-              <span className="text-[10px] text-zinc-400 block truncate">
+              <span className="text-[10px] text-slate-500 block truncate">
                 {connectedCount > 0 ? `${connectedCount} Channel${connectedCount !== 1 ? "s" : ""} Connected` : "No channels connected"}
               </span>
             </div>
@@ -202,7 +202,7 @@ export const AppSidebar: React.FC = () => {
             type="submit"
             className={cn(
               "w-full flex items-center gap-2.5 p-2 rounded-2xl text-xs font-medium transition-all duration-200",
-              "text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20",
+              "text-slate-500 hover:text-rose-600 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20",
               sidebarCollapsed ? "justify-center px-0" : ""
             )}
           >

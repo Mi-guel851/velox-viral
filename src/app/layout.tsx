@@ -1,21 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { BRAND } from "@/lib/brand";
 import { appUrl } from "@/lib/env";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl()),
@@ -43,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0d13",
+  themeColor: "#f8fbff",
   width: "device-width",
   initialScale: 1,
 };
@@ -54,20 +41,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="min-h-screen text-zinc-100 antialiased font-sans grain-overlay">
+    <html lang="en" className="light">
+      <body className="min-h-screen antialiased font-sans">
         {children}
         <Toaster
           position="bottom-right"
           closeButton
           toastOptions={{
             style: {
-              background: "rgba(16, 18, 28, 0.95)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              color: "#ffffff",
+              background: "#ffffff",
+              border: "1px solid #dce6f2",
+              color: "#14243b",
               backdropFilter: "blur(20px)",
               borderRadius: "14px",
-              boxShadow: "0 24px 48px -12px rgba(0,0,0,0.5)",
+              boxShadow: "0 18px 45px -12px rgba(40,80,140,0.18)",
               fontFamily: "var(--font-inter), system-ui, sans-serif",
             },
           }}

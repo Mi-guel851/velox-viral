@@ -33,15 +33,15 @@ export const ForgotPasswordForm: React.FC<{ configured: boolean }> = ({ configur
   if (result?.ok && result.message) {
     return (
       <div className="space-y-6 text-center">
-        <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/15 flex items-center justify-center text-amber-400 mx-auto">
+        <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center text-blue-600 mx-auto">
           <ShieldCheck className="w-6 h-6" />
         </div>
 
         <div className="space-y-2">
-          <h1 className="font-display text-2xl font-bold text-white tracking-tight">
+          <h1 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
             Check your result
           </h1>
-          <p className="text-sm text-zinc-400 leading-relaxed">{result.message}</p>
+          <p className="text-sm text-slate-500 leading-relaxed">{result.message}</p>
         </div>
 
         <Button
@@ -60,13 +60,13 @@ export const ForgotPasswordForm: React.FC<{ configured: boolean }> = ({ configur
   return (
     <div className="space-y-6">
       <header className="space-y-1.5">
-        <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/15 flex items-center justify-center text-amber-400 mb-3">
+        <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center text-blue-600 mb-3">
           <KeyRound className="w-5 h-5" />
         </div>
-        <h1 className="font-display text-2xl font-bold text-white tracking-tight">
+        <h1 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
           Recover your account
         </h1>
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-slate-500">
           Enter your email and the security phrase you set during signup.
         </p>
       </header>
@@ -95,7 +95,7 @@ export const ForgotPasswordForm: React.FC<{ configured: boolean }> = ({ configur
         <div className="space-y-1.5">
           <label
             htmlFor="security-phrase"
-            className="block text-xs font-semibold text-zinc-300 tracking-wide"
+            className="block text-xs font-semibold text-slate-600 tracking-wide"
           >
             Security phrase
           </label>
@@ -112,15 +112,15 @@ export const ForgotPasswordForm: React.FC<{ configured: boolean }> = ({ configur
             required
             disabled={isPending || !configured}
             className={cn(
-              "w-full rounded-xl bg-white/[0.03] border px-4 py-3 text-sm text-zinc-100",
-              "placeholder:text-zinc-600 transition-all",
-              "focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500/40",
+              "w-full rounded-xl bg-slate-100/80 border px-4 py-3 text-sm text-slate-800",
+              "placeholder:text-slate-400 transition-all",
+              "focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              "border-white/[0.06]"
+              "border-slate-200"
             )}
           />
           {result?.fieldErrors?.securityPhrase && (
-            <p className="text-[11px] font-medium text-rose-400">
+            <p className="text-[11px] font-medium text-rose-600">
               {result.fieldErrors.securityPhrase}
             </p>
           )}
@@ -143,11 +143,11 @@ export const ForgotPasswordForm: React.FC<{ configured: boolean }> = ({ configur
         </Button>
       </form>
 
-      <p className="text-center text-xs text-zinc-500">
+      <p className="text-center text-xs text-slate-500">
         Remembered your password?{" "}
         <Link
           href="/login"
-          className="font-semibold text-amber-500 hover:text-amber-400 transition-colors"
+          className="font-semibold text-blue-500 hover:text-blue-600 transition-colors"
         >
           Back to log in
         </Link>

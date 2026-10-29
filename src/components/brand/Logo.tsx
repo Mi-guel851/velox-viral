@@ -38,11 +38,11 @@ export const Logo: React.FC<LogoProps> = ({
     <div className={cn("flex items-center gap-2.5", className)}>
       <div
         className={cn(
-          "bg-amber-500 flex items-center justify-center text-zinc-950 shrink-0",
+          "bg-blue-500 flex items-center justify-center text-slate-50 shrink-0",
           MARK_SIZES[size]
         )}
       >
-        <Zap className={cn("fill-zinc-950", ICON_SIZES[size])} />
+        <Zap className={cn("fill-white", ICON_SIZES[size])} />
       </div>
 
       {!iconOnly && (
@@ -50,7 +50,7 @@ export const Logo: React.FC<LogoProps> = ({
           <div className="flex items-center gap-1.5">
             <span
               className={cn(
-                "font-display font-bold tracking-tight text-white truncate",
+                "font-display font-bold tracking-tight text-slate-900 truncate",
                 TEXT_SIZES[size]
               )}
             >
@@ -58,7 +58,7 @@ export const Logo: React.FC<LogoProps> = ({
             </span>
           </div>
           {withTagline && (
-            <span className="text-[10px] text-zinc-500 block font-medium truncate tracking-wide uppercase">
+            <span className="text-[10px] text-slate-500 block font-medium truncate tracking-wide uppercase">
               {BRAND.tagline}
             </span>
           )}

@@ -13,9 +13,9 @@ export default function ForgotPasswordPage() {
     <Suspense
       fallback={
         <div className="space-y-4 animate-pulse">
-          <div className="h-7 w-52 rounded-lg bg-white/[0.06]" />
-          <div className="h-[70px] rounded-2xl bg-white/[0.04]" />
-          <div className="h-12 rounded-2xl bg-white/[0.06]" />
+          <div className="h-7 w-52 rounded-lg bg-slate-100/80" />
+          <div className="h-[70px] rounded-2xl bg-slate-100/80" />
+          <div className="h-12 rounded-2xl bg-slate-100/80" />
         </div>
       }
     >
