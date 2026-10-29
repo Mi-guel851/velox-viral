@@ -29,7 +29,7 @@ export const FormField: React.FC<FormFieldProps> = ({
     <div className="space-y-1.5">
       <label
         htmlFor={fieldId}
-        className="block text-xs font-semibold text-zinc-300 tracking-wide"
+        className="block text-xs font-semibold text-slate-600 tracking-wide"
       >
         {label}
       </label>
@@ -40,14 +40,14 @@ export const FormField: React.FC<FormFieldProps> = ({
           aria-invalid={error ? true : undefined}
           aria-describedby={cn(error && errorId, hint && !error && hintId) || undefined}
           className={cn(
-            "w-full rounded-xl bg-white/[0.03] border px-4 py-3 text-sm text-zinc-100",
-            "placeholder:text-zinc-600 transition-all",
-            "focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500/40",
+            "w-full rounded-xl bg-slate-100/80 border px-4 py-3 text-sm text-slate-800",
+            "placeholder:text-slate-400 transition-all",
+            "focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             trailing && "pr-12",
             error
               ? "border-rose-500/40 focus:ring-rose-500/30 focus:border-rose-500/40"
-              : "border-white/[0.06]",
+              : "border-slate-200",
             className
           )}
           {...props}
@@ -64,13 +64,13 @@ export const FormField: React.FC<FormFieldProps> = ({
         <p
           id={errorId}
           role="alert"
-          className="flex items-start gap-1.5 text-[11px] font-medium text-rose-400"
+          className="flex items-start gap-1.5 text-[11px] font-medium text-rose-600"
         >
           <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-px" />
           <span>{error}</span>
         </p>
       ) : hint ? (
-        <p id={hintId} className="text-[11px] text-zinc-500">
+        <p id={hintId} className="text-[11px] text-slate-500">
           {hint}
         </p>
       ) : null}

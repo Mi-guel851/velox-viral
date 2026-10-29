@@ -29,10 +29,10 @@ export const SignupForm: React.FC<{ configured: boolean }> = ({ configured }) =>
   return (
     <div className="space-y-6">
       <header className="space-y-1.5">
-        <h1 className="font-display text-2xl font-bold text-white tracking-tight">
+        <h1 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
           Create your workspace
         </h1>
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-slate-500">
           Free to start. No card required.
         </p>
       </header>
@@ -85,7 +85,7 @@ export const SignupForm: React.FC<{ configured: boolean }> = ({ configured }) =>
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="p-2 rounded-lg text-zinc-500 hover:text-zinc-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                className="p-2 rounded-lg text-slate-500 hover:text-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -115,11 +115,11 @@ export const SignupForm: React.FC<{ configured: boolean }> = ({ configured }) =>
         </Button>
       </form>
 
-      <p className="text-center text-xs text-zinc-500">
+      <p className="text-center text-xs text-slate-500">
         Already have an account?{" "}
         <Link
           href="/login"
-          className="font-semibold text-amber-500 hover:text-amber-400 transition-colors"
+          className="font-semibold text-blue-500 hover:text-blue-600 transition-colors"
         >
           Log in
         </Link>

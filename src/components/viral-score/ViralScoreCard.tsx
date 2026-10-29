@@ -36,14 +36,14 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
 }) => {
   if (!score || score.overall === 0) {
     return (
-      <div className="glass-card rounded-2xl p-6 text-center border border-white/10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5" />
+      <div className="glass-card rounded-2xl p-6 text-center border border-slate-200 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-blue-500/5" />
         <div className="relative z-10 flex flex-col items-center justify-center py-6">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3 animate-pulse">
+          <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 mb-3 animate-pulse">
             <Sparkles className="w-6 h-6" />
           </div>
-          <h4 className="text-base font-semibold text-white">AI Viral Score Engine</h4>
-          <p className="text-xs text-zinc-400 max-w-xs mt-1">
+          <h4 className="text-base font-semibold text-slate-900">AI Viral Score Engine</h4>
+          <p className="text-xs text-slate-500 max-w-xs mt-1">
             Type your caption or prompt to analyze real-time viral probability, hook power, readability, and algorithmic fit.
           </p>
         </div>
@@ -52,11 +52,11 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
   }
 
   const getScoreColor = (val: number) => {
-    if (val >= 90) return "text-emerald-400";
-    if (val >= 80) return "text-cyan-400";
-    if (val >= 70) return "text-indigo-400";
-    if (val >= 55) return "text-amber-400";
-    return "text-rose-400";
+    if (val >= 90) return "text-emerald-700";
+    if (val >= 80) return "text-blue-600";
+    if (val >= 70) return "text-blue-600";
+    if (val >= 55) return "text-blue-600";
+    return "text-rose-600";
   };
 
   const getGradeBadge = (grade: string) => {
@@ -64,11 +64,11 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
       case "S":
         return "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.3)]";
       case "A":
-        return "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.3)]";
+        return "bg-blue-500/20 text-blue-700 border-blue-500/40 shadow-[0_0_15px_rgba(6,182,212,0.3)]";
       case "B":
-        return "bg-indigo-500/20 text-indigo-300 border-indigo-500/40 shadow-[0_0_15px_rgba(99,102,241,0.3)]";
+        return "bg-blue-500/20 text-blue-700 border-blue-500/40 shadow-[0_0_15px_rgba(99,102,241,0.3)]";
       case "C":
-        return "bg-amber-500/20 text-amber-300 border-amber-500/40";
+        return "bg-blue-500/20 text-blue-700 border-blue-500/40";
       default:
         return "bg-rose-500/20 text-rose-300 border-rose-500/40";
     }
@@ -107,16 +107,16 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "glass-panel rounded-3xl p-5 sm:p-6 border border-white/10 relative overflow-hidden",
+        "glass-panel rounded-3xl p-5 sm:p-6 border border-slate-200 relative overflow-hidden",
         compact ? "p-4" : "p-6"
       )}
     >
       {/* Background glow */}
-      <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
       {/* Header with Circular Score */}
-      <div className="flex items-center justify-between gap-4 pb-5 border-b border-white/10">
+      <div className="flex items-center justify-between gap-4 pb-5 border-b border-slate-200">
         <div className="flex items-center gap-4">
           {/* Radial Score Meter */}
           <div className="relative flex items-center justify-center">
@@ -127,7 +127,7 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
                 r="26"
                 stroke="currentColor"
                 strokeWidth="4"
-                className="text-white/10"
+                className="text-slate-900/10"
                 fill="transparent"
               />
               <motion.circle
@@ -148,7 +148,7 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-xl font-bold tracking-tight text-white">
+              <span className="text-xl font-bold tracking-tight text-slate-900">
                 {score.overall}
               </span>
             </div>
@@ -156,7 +156,7 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-white">AI Viral Score</span>
+              <span className="text-sm font-semibold text-slate-900">AI Viral Score</span>
               <span
                 className={cn(
                   "px-2 py-0.5 text-xs font-bold rounded-lg border",
@@ -166,8 +166,8 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
                 Grade {score.grade}
               </span>
             </div>
-            <p className="text-xs text-indigo-300 font-medium mt-0.5 flex items-center gap-1">
-              <Zap className="w-3 h-3 text-cyan-400 fill-cyan-400" />
+            <p className="text-xs text-blue-700 font-medium mt-0.5 flex items-center gap-1">
+              <Zap className="w-3 h-3 text-blue-600 fill-blue-400" />
               {score.estimatedReachMultiplier}
             </p>
           </div>
@@ -178,7 +178,7 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
             variant="ghost"
             size="icon"
             onClick={onReanalyze}
-            className="text-zinc-400 hover:text-white"
+            className="text-slate-500 hover:text-slate-900"
             title="Re-analyze post"
           >
             <RefreshCw className="w-4 h-4" />
@@ -191,26 +191,26 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
         {metrics.map((m) => (
           <div
             key={m.label}
-            className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors"
+            className="p-2.5 rounded-xl bg-slate-100/80 border border-slate-200 hover:border-slate-200 transition-colors"
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="text-zinc-400 flex items-center gap-1 font-medium text-[11px]">
-                <m.icon className="w-3 h-3 text-zinc-500" />
+              <span className="text-slate-500 flex items-center gap-1 font-medium text-[11px]">
+                <m.icon className="w-3 h-3 text-slate-500" />
                 {m.label}
               </span>
               <span className={cn("font-semibold text-xs", getScoreColor(m.value))}>
                 {m.value}%
               </span>
             </div>
-            <div className="h-1.5 w-full bg-zinc-800/80 rounded-full overflow-hidden">
+            <div className="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden">
               <motion.div
                 className={cn(
                   "h-full rounded-full",
                   m.value >= 85
-                    ? "bg-gradient-to-r from-emerald-500 to-cyan-400"
+                    ? "bg-gradient-to-r from-emerald-500 to-blue-400"
                     : m.value >= 70
-                    ? "bg-gradient-to-r from-indigo-500 to-purple-500"
-                    : "bg-gradient-to-r from-amber-500 to-rose-500"
+                    ? "bg-gradient-to-r from-blue-500 to-blue-500"
+                    : "bg-gradient-to-r from-blue-500 to-rose-500"
                 )}
                 initial={{ width: 0 }}
                 animate={{ width: `${m.value}%` }}
@@ -224,7 +224,7 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
       {/* Actionable Insights */}
       {score.highlights && score.highlights.length > 0 && (
         <div className="space-y-2 my-4">
-          <span className="text-xs font-semibold text-zinc-400 tracking-wider uppercase">
+          <span className="text-xs font-semibold text-slate-500 tracking-wider uppercase">
             Optimization Insights
           </span>
           <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
@@ -236,21 +236,21 @@ export const ViralScoreCard: React.FC<ViralScoreCardProps> = ({
                   h.type === "positive"
                     ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-200"
                     : h.type === "warning"
-                    ? "bg-amber-500/10 border-amber-500/20 text-amber-200"
-                    : "bg-indigo-500/10 border-indigo-500/20 text-indigo-200"
+                    ? "bg-blue-500/10 border-blue-500/20 text-blue-700"
+                    : "bg-blue-500/10 border-blue-500/20 text-blue-700"
                 )}
               >
                 {h.type === "positive" ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
                 ) : h.type === "warning" ? (
-                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <AlertTriangle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 ) : (
-                  <Lightbulb className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                  <Lightbulb className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 )}
                 <div className="flex-1">
                   <span>{h.message}</span>
                   {h.fix && (
-                    <span className="block mt-1 text-[11px] font-mono text-zinc-300 opacity-90">
+                    <span className="block mt-1 text-[11px] font-mono text-slate-600 opacity-90">
                       💡 Fix: {h.fix}
                     </span>
                   )}

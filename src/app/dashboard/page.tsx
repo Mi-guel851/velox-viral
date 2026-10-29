@@ -64,7 +64,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0d13] text-zinc-100 antialiased">
+    <div className="min-h-screen workspace-background text-slate-800 antialiased">
       <div className="flex gap-4 p-4 max-w-[1920px] mx-auto">
         {/* Desktop Sidebar */}
         <AppSidebar />

@@ -51,7 +51,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
     return (
       <div className="space-y-6">
         <header className="space-y-1.5">
-          <h1 className="font-display text-2xl font-bold text-white tracking-tight">
+          <h1 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
             This link isn&apos;t valid
           </h1>
         </header>
@@ -72,7 +72,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
           <Button
             asChild
             variant="ghost"
-            className="w-full h-11 rounded-xl text-sm text-zinc-400 hover:text-zinc-100"
+            className="w-full h-11 rounded-xl text-sm text-slate-500 hover:text-slate-800"
           >
             <Link href="/login">Back to log in</Link>
           </Button>
@@ -84,13 +84,13 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   return (
     <div className="space-y-6">
       <header className="space-y-1.5">
-        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center text-emerald-400 mb-3">
+        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center text-emerald-700 mb-3">
           <ShieldCheck className="w-5 h-5" />
         </div>
-        <h1 className="font-display text-2xl font-bold text-white tracking-tight">
+        <h1 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
           Choose a new password
         </h1>
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-slate-500">
           You&apos;ll be signed in once it&apos;s saved.
         </p>
       </header>
@@ -117,7 +117,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="p-2 rounded-lg text-zinc-500 hover:text-zinc-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                className="p-2 rounded-lg text-slate-500 hover:text-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

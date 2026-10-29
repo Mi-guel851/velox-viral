@@ -178,20 +178,20 @@ export const AICaptionStudio: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-12">
       {/* Studio Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl glass-panel relative overflow-hidden border border-white/10">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-indigo-500/10 via-purple-500/10 to-transparent blur-3xl pointer-events-none" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl glass-panel relative overflow-hidden border border-slate-200">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-500/10 via-blue-500/10 to-transparent blur-3xl pointer-events-none" />
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-700 border border-blue-500/30 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
               AI Prompt & Variation Studio
             </span>
             <Badge variant="success">Ultra Low Latency</Badge>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             AI Viral Caption Studio
           </h2>
-          <p className="text-sm text-zinc-400 mt-1 max-w-xl">
+          <p className="text-sm text-slate-500 mt-1 max-w-xl">
             Engineer high-converting social copy with psychological hooks, algorithmic formatting, and multi-model variations.
           </p>
         </div>
@@ -218,10 +218,10 @@ export const AICaptionStudio: React.FC = () => {
         {/* Left Column: Input & Controls */}
         <div className="lg:col-span-1 space-y-5">
           {/* Topic & Idea Card */}
-          <div className="glass-card rounded-3xl p-5 space-y-4 border border-white/10">
+          <div className="glass-card rounded-3xl p-5 space-y-4 border border-slate-200">
             <div>
-              <label className="text-xs font-semibold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-                <Lightbulb className="w-4 h-4 text-amber-400" />
+              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+                <Lightbulb className="w-4 h-4 text-blue-600" />
                 Topic or Master Idea
               </label>
               <textarea
@@ -229,13 +229,13 @@ export const AICaptionStudio: React.FC = () => {
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="E.g. Why most founders struggle with distribution and how to fix it..."
                 rows={3}
-                className="w-full rounded-2xl bg-zinc-950/70 border border-white/10 p-3 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
+                className="w-full rounded-2xl bg-slate-50 border border-slate-200 p-3 text-sm text-slate-800 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
               />
             </div>
 
             {/* Quick Prompts Chips */}
             <div>
-              <span className="text-[11px] font-medium text-zinc-400 block mb-2">
+              <span className="text-[11px] font-medium text-slate-500 block mb-2">
                 Quick Inspiration Topics:
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -243,7 +243,7 @@ export const AICaptionStudio: React.FC = () => {
                   <button
                     key={t}
                     onClick={() => setTopic(t)}
-                    className="text-[11px] px-2.5 py-1 rounded-xl bg-white/[0.04] hover:bg-white/10 border border-white/5 text-zinc-300 hover:text-white transition-all text-left"
+                    className="text-[11px] px-2.5 py-1 rounded-xl bg-slate-100/80 hover:bg-slate-100/80 border border-slate-200 text-slate-600 hover:text-slate-900 transition-all text-left"
                   >
                     {t}
                   </button>
@@ -253,7 +253,7 @@ export const AICaptionStudio: React.FC = () => {
 
             {/* Platform Focus */}
             <div>
-              <label className="text-xs font-semibold text-zinc-300 uppercase tracking-wider block mb-2">
+              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-2">
                 Target Algorithm
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -264,8 +264,8 @@ export const AICaptionStudio: React.FC = () => {
                     className={cn(
                       "p-2 rounded-xl flex flex-col items-center justify-center gap-1 border transition-all text-xs font-medium",
                       selectedPlatform === p
-                        ? "bg-indigo-600/30 border-indigo-500 text-white shadow-sm"
-                        : "bg-white/[0.02] border-white/5 text-zinc-400 hover:text-white hover:bg-white/[0.05]"
+                        ? "bg-blue-600/30 border-blue-500 text-slate-900 shadow-sm"
+                        : "bg-slate-100/80 border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100/80"
                     )}
                   >
                     <PlatformIcon platform={p} className="w-4 h-4" />
@@ -277,7 +277,7 @@ export const AICaptionStudio: React.FC = () => {
 
             {/* Tone Selector */}
             <div>
-              <label className="text-xs font-semibold text-zinc-300 uppercase tracking-wider block mb-2">
+              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-2">
                 Psychological Tone
               </label>
               <div className="space-y-1.5">
@@ -288,30 +288,30 @@ export const AICaptionStudio: React.FC = () => {
                     className={cn(
                       "w-full text-left p-2.5 rounded-xl border transition-all flex flex-col",
                       selectedTone === t.id
-                        ? "bg-white/10 border-indigo-400 text-white shadow-sm"
-                        : "bg-white/[0.02] border-white/5 text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                        ? "bg-slate-100/80 border-blue-400 text-slate-900 shadow-sm"
+                        : "bg-slate-100/80 border-slate-200 text-slate-500 hover:bg-slate-100/80 hover:text-slate-700"
                     )}
                   >
-                    <span className="text-xs font-semibold text-zinc-200">{t.label}</span>
-                    <span className="text-[10px] text-zinc-400">{t.desc}</span>
+                    <span className="text-xs font-semibold text-slate-700">{t.label}</span>
+                    <span className="text-[10px] text-slate-500">{t.desc}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Image Upload for AI Analysis */}
-            <div className="pt-2 border-t border-white/10 space-y-2">
-              <label className="text-xs font-semibold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Camera className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="pt-2 border-t border-slate-200 space-y-2">
+              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                <Camera className="w-3.5 h-3.5 text-blue-600" />
                 Generate from Image
               </label>
-              <p className="text-[10px] text-zinc-500 leading-relaxed">
+              <p className="text-[10px] text-slate-500 leading-relaxed">
                 Upload a photo and AI will analyze it to create captions. The image is only analyzed temporarily and never stored.
               </p>
 
               {uploadedImage ? (
                 <div className="relative">
-                  <div className="w-full h-32 rounded-2xl overflow-hidden border border-white/10 bg-zinc-950">
+                  <div className="w-full h-32 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
                     <img
                       src={`data:${uploadedMimeType};base64,${uploadedImage}`}
                       alt="Uploaded for analysis"
@@ -320,7 +320,7 @@ export const AICaptionStudio: React.FC = () => {
                   </div>
                   <button
                     onClick={handleRemoveImage}
-                    className="absolute top-2 right-2 bg-black/70 text-white rounded-full p-1 hover:bg-rose-500 transition-colors"
+                    className="absolute top-2 right-2 bg-black/70 text-slate-900 rounded-full p-1 hover:bg-rose-500 transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -343,11 +343,11 @@ export const AICaptionStudio: React.FC = () => {
                 <button
                   onClick={() => fileInputRef.current?.click()
                   }
-                  className="w-full p-4 rounded-2xl border-2 border-dashed border-white/10 hover:border-cyan-400/50 bg-white/[0.02] hover:bg-cyan-500/5 transition-all flex flex-col items-center gap-2 text-zinc-400 hover:text-cyan-300"
+                  className="w-full p-4 rounded-2xl border-2 border-dashed border-slate-200 hover:border-blue-400/50 bg-slate-100/80 hover:bg-blue-500/5 transition-all flex flex-col items-center gap-2 text-slate-500 hover:text-blue-700"
                 >
                   <Upload className="w-5 h-5" />
                   <span className="text-xs font-medium">Click to upload an image</span>
-                  <span className="text-[10px] text-zinc-500">JPG, PNG, WebP up to 10MB</span>
+                  <span className="text-[10px] text-slate-500">JPG, PNG, WebP up to 10MB</span>
                 </button>
               )}
               <input
@@ -360,15 +360,15 @@ export const AICaptionStudio: React.FC = () => {
             </div>
 
             {/* Hook Generator Shortcut */}
-            <div className="pt-2 border-t border-white/10">
+            <div className="pt-2 border-t border-slate-200">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleGenerateHooks}
                 disabled={isGenerating}
-                className="w-full rounded-xl text-xs flex items-center justify-center gap-2 border-dashed border-white/20 hover:border-indigo-400"
+                className="w-full rounded-xl text-xs flex items-center justify-center gap-2 border-dashed border-slate-200 hover:border-blue-400"
               >
-                <Flame className="w-3.5 h-3.5 text-amber-400" />
+                <Flame className="w-3.5 h-3.5 text-blue-600" />
                 <span>Generate 5 Viral Opening Hooks</span>
               </Button>
             </div>
@@ -382,12 +382,12 @@ export const AICaptionStudio: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass-card rounded-3xl p-5 border border-amber-500/20 bg-gradient-to-r from-amber-500/5 via-zinc-900/60 to-transparent"
+              className="glass-card rounded-3xl p-5 border border-blue-500/20 bg-gradient-to-r from-blue-500/5 via-zinc-900/60 to-transparent"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Flame className="w-4 h-4 text-amber-400" />
-                  <span className="text-sm font-bold text-white">Curated Viral Opening Hooks</span>
+                  <Flame className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-bold text-slate-900">Curated Viral Opening Hooks</span>
                 </div>
                 <Badge variant="warning">Top 5 Formulas</Badge>
               </div>
@@ -396,18 +396,18 @@ export const AICaptionStudio: React.FC = () => {
                 {generatedHooks.map((h, i) => (
                   <div
                     key={i}
-                    className="p-3 rounded-2xl bg-black/40 border border-white/10 flex items-start justify-between gap-3 group hover:border-amber-500/40 transition-all"
+                    className="p-3 rounded-2xl bg-black/40 border border-slate-200 flex items-start justify-between gap-3 group hover:border-blue-500/40 transition-all"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-semibold">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-700 font-semibold">
                           {h.category}
                         </span>
-                        <span className="text-[11px] text-emerald-400 font-semibold">
+                        <span className="text-[11px] text-emerald-700 font-semibold">
                           ⚡ {h.score}% Viral Potential
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-200 font-medium leading-relaxed">
+                      <p className="text-xs text-slate-700 font-medium leading-relaxed">
                         &ldquo;{h.hook}&rdquo;
                       </p>
                     </div>
@@ -416,7 +416,7 @@ export const AICaptionStudio: React.FC = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleUseInComposer(h.hook)}
-                      className="h-8 px-2.5 text-xs text-amber-400 hover:text-amber-300 hover:bg-amber-400/10 shrink-0"
+                      className="h-8 px-2.5 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-400/10 shrink-0"
                     >
                       <span>Use Hook</span>
                       <ArrowRight className="w-3.5 h-3.5 ml-1" />
@@ -430,22 +430,22 @@ export const AICaptionStudio: React.FC = () => {
           {/* Variations Cards */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-indigo-400" />
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-blue-600" />
                 {variations.length > 0 ? "Multi-Angle Generated Variations" : "Recommended Starter Formats"}
               </h3>
               {variations.length > 0 && (
-                <span className="text-xs text-zinc-400">3 Variations Generated</span>
+                <span className="text-xs text-slate-500">3 Variations Generated</span>
               )}
             </div>
 
             {variations.length === 0 ? (
-              <div className="glass-panel rounded-3xl p-10 text-center border border-white/10">
-                <div className="w-16 h-16 rounded-3xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mx-auto mb-4 animate-pulse">
+              <div className="glass-panel rounded-3xl p-10 text-center border border-slate-200">
+                <div className="w-16 h-16 rounded-3xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 mx-auto mb-4 animate-pulse">
                   <Wand2 className="w-8 h-8" />
                 </div>
-                <h4 className="text-lg font-semibold text-white">Generate 3 High-Impact Angles</h4>
-                <p className="text-sm text-zinc-400 max-w-md mx-auto mt-1 mb-6">
+                <h4 className="text-lg font-semibold text-slate-900">Generate 3 High-Impact Angles</h4>
+                <p className="text-sm text-slate-500 max-w-md mx-auto mt-1 mb-6">
                   Select your topic and tone on the left, then click &ldquo;Generate Variations&rdquo; to produce instant viral copy tailored to algorithms.
                 </p>
                 <Button
@@ -464,12 +464,12 @@ export const AICaptionStudio: React.FC = () => {
                     key={v.id}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="glass-card rounded-3xl p-5 border border-white/10 hover:border-white/20 transition-all space-y-3 relative group"
+                    className="glass-card rounded-3xl p-5 border border-slate-200 hover:border-slate-200 transition-all space-y-3 relative group"
                   >
-                    <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-sm text-white">{v.title}</span>
-                        <span className="px-2 py-0.5 rounded-md text-[10px] bg-white/10 text-zinc-300 font-medium">
+                        <span className="font-semibold text-sm text-slate-900">{v.title}</span>
+                        <span className="px-2 py-0.5 rounded-md text-[10px] bg-slate-100/80 text-slate-600 font-medium">
                           {v.tone}
                         </span>
                       </div>
@@ -480,7 +480,7 @@ export const AICaptionStudio: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-black/40 border border-white/5 text-xs text-zinc-200 leading-relaxed whitespace-pre-wrap font-sans">
+                    <div className="p-4 rounded-2xl bg-black/40 border border-slate-200 text-xs text-slate-700 leading-relaxed whitespace-pre-wrap font-sans">
                       {v.content}
                     </div>
 
@@ -489,7 +489,7 @@ export const AICaptionStudio: React.FC = () => {
                         {v.hashtags.map((tag) => (
                           <span
                             key={tag}
-                            className="text-[11px] text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-lg"
+                            className="text-[11px] text-blue-600 bg-blue-500/10 px-2 py-0.5 rounded-lg"
                           >
                             #{tag}
                           </span>
@@ -501,10 +501,10 @@ export const AICaptionStudio: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleCopy(v.content, v.id)}
-                          className="h-8 px-2.5 text-xs text-zinc-400 hover:text-white"
+                          className="h-8 px-2.5 text-xs text-slate-500 hover:text-slate-900"
                         >
                           {copiedId === v.id ? (
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <Check className="w-3.5 h-3.5 text-emerald-700" />
                           ) : (
                             <Copy className="w-3.5 h-3.5" />
                           )}
@@ -513,7 +513,7 @@ export const AICaptionStudio: React.FC = () => {
                           variant="apple"
                           size="sm"
                           onClick={() => handleUseInComposer(v.content)}
-                          className="h-8 px-3.5 text-xs font-semibold rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border-indigo-500/40 text-white"
+                          className="h-8 px-3.5 text-xs font-semibold rounded-xl bg-blue-600/30 hover:bg-blue-600/50 border-blue-500/40 text-slate-900"
                         >
                           <span>Use in Composer</span>
                           <ArrowRight className="w-3.5 h-3.5 ml-1.5" />

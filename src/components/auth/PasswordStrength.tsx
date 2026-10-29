@@ -13,18 +13,18 @@ interface PasswordStrengthProps {
 
 const STRENGTH_LABELS = ["Too weak", "Weak", "Fair", "Good", "Strong"];
 const STRENGTH_COLORS = [
-  "bg-zinc-700",
+  "bg-slate-50",
   "bg-rose-500",
-  "bg-amber-500",
-  "bg-cyan-500",
+  "bg-blue-500",
+  "bg-blue-500",
   "bg-emerald-500",
 ];
 const STRENGTH_TEXT = [
-  "text-zinc-500",
-  "text-rose-400",
-  "text-amber-400",
-  "text-cyan-400",
-  "text-emerald-400",
+  "text-slate-500",
+  "text-rose-600",
+  "text-blue-600",
+  "text-blue-600",
+  "text-emerald-700",
 ];
 
 /**
@@ -52,7 +52,7 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({
               key={index}
               className={cn(
                 "h-1 flex-1 rounded-full transition-colors duration-300",
-                index < score ? STRENGTH_COLORS[score] : "bg-white/[0.08]"
+                index < score ? STRENGTH_COLORS[score] : "bg-slate-100/80"
               )}
             />
           ))}
@@ -72,7 +72,7 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({
               key={rule.id}
               className={cn(
                 "flex items-center gap-1.5 text-[10px] transition-colors",
-                rule.passed ? "text-emerald-400" : "text-zinc-500"
+                rule.passed ? "text-emerald-700" : "text-slate-500"
               )}
             >
               {rule.passed ? (
